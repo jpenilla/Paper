@@ -1,0 +1,177 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jason Penilla <11360596+jpenilla@users.noreply.github.com>
+Date: Mon, 16 Aug 2021 01:31:54 -0500
+Subject: [PATCH] Add '/paper mobcaps' command to view how full the mobcaps are
+
+Also has a hover text on each mob spawn category listing what entity types are in said category
+
+TODO: Add EntityTypeTags for MobCategorys, to allow for autofilling a /kill command on entity type clickevent
+ - maybe this should be a separate patch, as it could be somewhat useful in general?
+
+diff --git a/src/main/java/com/destroystokyo/paper/PaperCommand.java b/src/main/java/com/destroystokyo/paper/PaperCommand.java
+index ba8395435482fc4d6e02fc86794cdb0d35d4399c..73e391999cbcac4e4b689bf6c8f01462ff769106 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperCommand.java
++++ b/src/main/java/com/destroystokyo/paper/PaperCommand.java
+@@ -10,6 +10,10 @@ import com.google.common.collect.Maps;
+ import com.google.gson.JsonObject;
+ import com.google.gson.internal.Streams;
+ import com.google.gson.stream.JsonWriter;
++import net.kyori.adventure.text.Component;
++import net.kyori.adventure.text.TextComponent;
++import net.kyori.adventure.text.format.NamedTextColor;
++import net.minecraft.core.Registry;
+ import net.minecraft.resources.ResourceLocation;
+ import net.minecraft.server.MCUtil;
+ import net.minecraft.server.MinecraftServer;
+@@ -19,10 +23,12 @@ import net.minecraft.server.level.ServerLevel;
+ import net.minecraft.server.level.ServerPlayer;
+ import net.minecraft.server.level.ThreadedLevelLightEngine;
+ import net.minecraft.world.entity.EntityType;
++import net.minecraft.world.entity.MobCategory;
+ import net.minecraft.world.level.ChunkPos;
+ import net.minecraft.network.protocol.game.ClientboundLightUpdatePacket;
+ import net.minecraft.resources.ResourceLocation;
+ import net.minecraft.server.MCUtil;
++import net.minecraft.world.level.NaturalSpawner;
+ import org.apache.commons.lang3.tuple.MutablePair;
+ import org.apache.commons.lang3.tuple.Pair;
+ import org.bukkit.Bukkit;
+@@ -49,8 +55,10 @@ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.Collection;
+ import java.util.Collections;
++import java.util.Comparator;
+ import java.util.Deque;
+ import java.util.Iterator;
++import java.util.LinkedHashMap;
+ import java.util.List;
+ import java.util.Locale;
+ import java.util.Map;
+@@ -59,7 +67,7 @@ import java.util.stream.Collectors;
+ 
+ public class PaperCommand extends Command {
+     private static final String BASE_PERM = "bukkit.command.paper.";
+-    private static final ImmutableSet<String> SUBCOMMANDS = ImmutableSet.<String>builder().add("heap", "entity", "reload", "version", "debug", "chunkinfo", "fixlight", "syncloadinfo", "dumpitem").build();
++    private static final ImmutableSet<String> SUBCOMMANDS = ImmutableSet.<String>builder().add("heap", "entity", "reload", "version", "debug", "chunkinfo", "fixlight", "syncloadinfo", "dumpitem", "mobcaps").build();
+ 
+     public PaperCommand(String name) {
+         super(name);
+@@ -92,6 +100,7 @@ public class PaperCommand extends Command {
+                     return getListMatchingLast(sender, args, "help", "chunks");
+                 }
+                 break;
++            case "mobcaps":
+             case "chunkinfo":
+                 List<String> worldNames = new ArrayList<>();
+                 worldNames.add("*");
+@@ -183,6 +192,9 @@ public class PaperCommand extends Command {
+             case "syncloadinfo":
+                 this.doSyncLoadInfo(sender, args);
+                 break;
++            case "mobcaps":
++                this.printMobcaps(sender, args);
++                break;
+             case "ver":
+                 if (!testPermission(sender, "version")) break; // "ver" needs a special check because it's an alias. All other commands are checked up before the switch statement (because they are present in the SUBCOMMANDS set)
+             case "version":
+@@ -241,7 +253,80 @@ public class PaperCommand extends Command {
+         }
+     }
+ 
+-    private void doChunkInfo(CommandSender sender, String[] args) {
++    private static final List<NamedTextColor> COLOR_LIST = NamedTextColor.NAMES.values().stream()
++        .filter(color -> color != NamedTextColor.WHITE && color != NamedTextColor.BLACK && color != NamedTextColor.GRAY && color != NamedTextColor.DARK_GRAY)
++        .sorted(Comparator.comparing(Object::toString))
++        .toList();
++
++    private static final Map<MobCategory, NamedTextColor> MOB_CATEGORY_COLORS = new LinkedHashMap<>() {{
++        final List<MobCategory> categories = Arrays.asList(MobCategory.values());
++        for (int i = 0; i < categories.size(); i++) {
++            int colorIndex = i;
++            while (colorIndex > COLOR_LIST.size() - 1) {
++                colorIndex = colorIndex - COLOR_LIST.size();
++            }
++            this.put(categories.get(i), COLOR_LIST.get(colorIndex));
++        }
++    }};
++
++    private void printMobcaps(CommandSender sender, String[] args) {
++        final List<World> worlds;
++        if (args.length == 1 && sender instanceof Player player) {
++            worlds = List.of(player.getWorld());
++        } else {
++            worlds = worlds(sender, args);
++        }
++        if (worlds.isEmpty()) return;
++
++        for (final World world : worlds) {
++            final NaturalSpawner.SpawnState state = ((CraftWorld) world).getHandle().getChunkSource().getLastSpawnState();
++
++            final TextComponent.Builder builder = Component.text();
++
++            final int chunks;
++            if (state == null) {
++                chunks = 0;
++            } else {
++                chunks = state.getSpawnableChunkCount();
++            }
++            builder.append(
++                Component.text("Mobcaps for world: "),
++                Component.text(world.getName(), NamedTextColor.AQUA),
++                Component.text(" (" + chunks + " spawnable chunks)")
++            );
++
++            MOB_CATEGORY_COLORS.forEach((category, color) -> {
++                final int count;
++                if (state == null) {
++                    count = 0;
++                } else {
++                    count = state.getMobCategoryCounts().getOrDefault(category, 0);
++                }
++
++                final Component categoryComponent = Component.text()
++                    .content("  " + category.name())
++                    .color(color)
++                    .hoverEvent(Registry.ENTITY_TYPE.entrySet().stream()
++                        .filter(it -> it.getValue().getCategory() == category)
++                        .map(it -> Component.translatable(it.getValue().getDescriptionId()))
++                        .collect(Component.toComponent(Component.text(", ", NamedTextColor.GRAY))))
++                    .build();
++
++                builder.append(
++                    Component.newline(),
++                    categoryComponent,
++                    Component.text(": ", NamedTextColor.GRAY),
++                    Component.text(count),
++                    Component.text("/", NamedTextColor.GRAY),
++                    Component.text(category.getMaxInstancesPerChunk())
++                );
++            });
++
++            sender.sendMessage(builder);
++        }
++    }
++
++    private List<World> worlds(CommandSender sender, String[] args) {
+         List<org.bukkit.World> worlds;
+         if (args.length < 2 || args[1].equals("*")) {
+             worlds = Bukkit.getWorlds();
+@@ -251,11 +336,17 @@ public class PaperCommand extends Command {
+                 org.bukkit.World world = Bukkit.getWorld(args[i]);
+                 if (world == null) {
+                     sender.sendMessage(ChatColor.RED + "World '" + args[i] + "' is invalid");
+-                    return;
++                    return Collections.emptyList();
+                 }
+                 worlds.add(world);
+             }
+         }
++        return worlds;
++    }
++
++    private void doChunkInfo(CommandSender sender, String[] args) {
++        final List<World> worlds = worlds(sender, args);
++        if (worlds.isEmpty()) return;
+ 
+         int accumulatedTotal = 0;
+         int accumulatedInactive = 0;
