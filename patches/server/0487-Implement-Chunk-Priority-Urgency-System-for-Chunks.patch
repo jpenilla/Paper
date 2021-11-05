@@ -991,7 +991,7 @@ index d94241bcca4f2fd5e464a860bd356af504dc68b7..1cc4e0a1f3d8235ef88b48e01ca8b78a
      }
  }
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index e5317a994cb9b30293ad54b8fc537f703ef994dc..eb6a802ea12a19a058fb7e23b7418b8b426b4ca0 100644
+index 8cef8dca3971cbbb4eddf08ff47eca6874c1ac99..77a6a5883d7e9fba12d0a2c8f3e7f2565d4785b4 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 @@ -610,6 +610,26 @@ public class ServerChunkCache extends ChunkSource {
@@ -1040,7 +1040,7 @@ index e5317a994cb9b30293ad54b8fc537f703ef994dc..eb6a802ea12a19a058fb7e23b7418b8b
              ichunkaccess = (ChunkAccess) ((Either) completablefuture.join()).map((ichunkaccess1) -> {
                  return ichunkaccess1;
 @@ -731,10 +755,12 @@ public class ServerChunkCache extends ChunkSource {
-         if (flag && !currentlyUnloading) {
+         if (create && !currentlyUnloading) {
              // CraftBukkit end
              this.distanceManager.addTicket(TicketType.UNKNOWN, chunkcoordintpair, l, chunkcoordintpair);
 +            if (isUrgent) this.distanceManager.markUrgent(chunkcoordintpair); // Paper - Chunk priority
@@ -1052,14 +1052,13 @@ index e5317a994cb9b30293ad54b8fc537f703ef994dc..eb6a802ea12a19a058fb7e23b7418b8b
                  this.runDistanceManagerUpdates();
                  playerchunk = this.getVisibleChunkIfPresent(k);
                  gameprofilerfiller.pop();
-@@ -743,8 +769,13 @@ public class ServerChunkCache extends ChunkSource {
-                 }
+@@ -744,7 +770,13 @@ public class ServerChunkCache extends ChunkSource {
              }
          }
--
--        return this.chunkAbsent(playerchunk, l) ? ChunkHolder.UNLOADED_CHUNK_FUTURE : playerchunk.getOrScheduleFuture(chunkstatus, this.chunkMap);
+ 
+-        return this.chunkAbsent(playerchunk, l) ? ChunkHolder.UNLOADED_CHUNK_FUTURE : playerchunk.getOrScheduleFuture(leastStatus, this.chunkMap);
 +        // Paper start - Chunk priority
-+        CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> future = this.chunkAbsent(playerchunk, l) ? ChunkHolder.UNLOADED_CHUNK_FUTURE : playerchunk.getOrScheduleFuture(chunkstatus, this.chunkMap);
++        CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>> future = this.chunkAbsent(playerchunk, l) ? ChunkHolder.UNLOADED_CHUNK_FUTURE : playerchunk.getOrScheduleFuture(leastStatus, this.chunkMap);
 +        if (isUrgent) {
 +            future.thenAccept(either -> this.distanceManager.clearUrgent(chunkcoordintpair));
 +        }
@@ -1068,7 +1067,7 @@ index e5317a994cb9b30293ad54b8fc537f703ef994dc..eb6a802ea12a19a058fb7e23b7418b8b
      }
  
      private boolean chunkAbsent(@Nullable ChunkHolder holder, int maxLevel) {
-@@ -796,6 +827,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -796,6 +828,7 @@ public class ServerChunkCache extends ChunkSource {
      }
  
      public boolean runDistanceManagerUpdates() {
@@ -1424,7 +1423,7 @@ index 8770fe0db46b01e8b608637df4f1a669a3f4cdde..3c1698ba0d3bc412ab957777d9b5211d
      private final String name;
      private final Comparator<T> comparator;
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 8d86b9cacfaf71ec04dd530f3c0d75ee46c517df..14d4ef096624112c732b4c4f15763dc7c287d576 100644
+index faa05ccae71828bb0233212678ccd2978669d83a..c3a6379ca22923a48c822744b8cf13c05d234345 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 @@ -1545,6 +1545,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser

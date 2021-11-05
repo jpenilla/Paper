@@ -8,7 +8,7 @@ makes it so that the server keeps the last difficulty used instead
 of restoring the server.properties every single load.
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index b4ca88f9285fb5a55ed5b03355a77fd564ebaa80..58652325de8c3978359a9864bb68da9347990774 100644
+index 046ae56c77c7ca7afea93b6f839d91a62bee3ebc..ae75467479b04f6b8109da9ed9fd127152f997b5 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -856,7 +856,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -81,10 +81,10 @@ index 8098875a5c4146dec81f5daed0e34ddfe17a26c6..286863b7eb9ee0389154304e61942dd6
  
      @Override
 diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-index 7bd2a88de8eaf9d72d9424a39d5df2600bed7e58..c0ae236619bbdf9293fbf1c4a1764a785d16a67b 100644
+index f66a12a110e877470ef3bd8f3d0b0e83109cc0f2..faa05ccae71828bb0233212678ccd2978669d83a 100644
 --- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
-@@ -3022,7 +3022,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
+@@ -3023,7 +3023,7 @@ public class ServerGamePacketListenerImpl implements ServerPlayerConnection, Ser
      public void handleChangeDifficulty(ServerboundChangeDifficultyPacket packet) {
          PacketUtils.ensureRunningOnSameThread(packet, this, this.player.getLevel());
          if (this.player.hasPermissions(2) || this.isSingleplayerOwner()) {
@@ -94,7 +94,7 @@ index 7bd2a88de8eaf9d72d9424a39d5df2600bed7e58..c0ae236619bbdf9293fbf1c4a1764a78
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index cb08173bdfe52c8a0d5de70f0421cabaa476647a..da9fc8a99576f13a52ab4830cb09b69b1e406fae 100644
+index f647c541c6908cae5f7b64054d71db2971bd5d1d..740bbfdfecd953d91075c507d1f8ee00dd02c9a8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -880,8 +880,8 @@ public final class CraftServer implements Server {

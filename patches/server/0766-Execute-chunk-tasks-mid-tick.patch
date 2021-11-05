@@ -31,7 +31,7 @@ index 5fdaefc128956581be4bb9b34199fd6410563991..b7edc1121797bc1c57e25f540ed0124f
                  // start copy from TickListServer // TODO check on update
                  CrashReport crashreport = CrashReport.forThrowable(thr, "Exception while ticking");
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index ecb167f6a114a7e3bfac05db2e87631ec88a0ba2..fe6d5051b139cd6079e288ffdf20e30fdd46fdda 100644
+index 683c24cfbf5d4c224deaf9101e096d6af12ddc0e..293b65fba79f7ec02c41ec91a488eec23efc91d5 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -330,6 +330,76 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -120,10 +120,10 @@ index ecb167f6a114a7e3bfac05db2e87631ec88a0ba2..fe6d5051b139cd6079e288ffdf20e30f
          } else {
              if (this.haveTime()) {
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index 7ea86cbeb72f08d751c14006f428fe5921916061..108f2212f8bd00247bf73ff4f3ba42830abad459 100644
+index d6981bbcf480c5856b51960013d144beba2361b3..39840403da99252c5d634e99e1da19f6066dee7c 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-@@ -1022,6 +1022,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -1023,6 +1023,7 @@ public class ServerChunkCache extends ChunkSource {
                  Collections.shuffle(shuffled);
                  iterator = shuffled.iterator();
              }
@@ -131,7 +131,7 @@ index 7ea86cbeb72f08d751c14006f428fe5921916061..108f2212f8bd00247bf73ff4f3ba4283
              try { while (iterator.hasNext()) {
                  LevelChunk chunk = iterator.next();
                  ChunkHolder playerchunk = chunk.playerChunk;
-@@ -1044,6 +1045,7 @@ public class ServerChunkCache extends ChunkSource {
+@@ -1045,6 +1046,7 @@ public class ServerChunkCache extends ChunkSource {
                          this.level.tickChunk(chunk, k);
                          // this.level.timings.doTickTiles.stopTiming(); // Spigot // Paper
                      }
@@ -140,7 +140,7 @@ index 7ea86cbeb72f08d751c14006f428fe5921916061..108f2212f8bd00247bf73ff4f3ba4283
              } // Paper start - optimise chunk tick iteration
              } finally {
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 3351c4d43b41db5a0718d7ff761b06d950b7ee87..9c69855874da2c18e9c80decf4244a0f50021a28 100644
+index 2eb1a5d951fbc126b66a96d39099cac4a03e7e2c..efea8e8898c1cce5f52a18f7b5cf7a94691accf2 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -190,7 +190,9 @@ public class ServerLevel extends Level implements WorldGenLevel {
