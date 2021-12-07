@@ -55,7 +55,7 @@ index 7cb613103bca57c82418f4f968922f510819ee70..d8d1b8cd0104f1c916de443af291ec36
  
                  if (chunkHolder.protoChunk != null) {try (Timing ignored2 = this.level.timings.chunkLoadLevelTimer.startTimingIfSync()) { // Paper start - timings // Paper - chunk is created async
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
-index 8a569e3300543cb171c3befae59969628adc424c..bbd9fdaa4b12543307b144da72b0604eae638cbb 100644
+index b3bd0bb1aa5f100deff0cfd0cf6b0f96ccf5a862..9fa3dc31b810281ced2d455acba882ad27070a40 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
 @@ -1,5 +1,6 @@
@@ -213,7 +213,7 @@ index 8a569e3300543cb171c3befae59969628adc424c..bbd9fdaa4b12543307b144da72b0604e
      public void add(BlockPos pos, PoiType type) {
          this.getOrCreate(SectionPos.asLong(pos)).add(pos, type);
      }
-@@ -181,8 +311,8 @@ public class PoiManager extends SectionStorage<PoiSection> {
+@@ -180,8 +310,8 @@ public class PoiManager extends SectionStorage<PoiSection> {
      }
  
      public int sectionsToVillage(SectionPos pos) {
@@ -224,7 +224,7 @@ index 8a569e3300543cb171c3befae59969628adc424c..bbd9fdaa4b12543307b144da72b0604e
      }
  
      boolean isVillageCenter(long pos) {
-@@ -195,7 +325,7 @@ public class PoiManager extends SectionStorage<PoiSection> {
+@@ -194,7 +324,7 @@ public class PoiManager extends SectionStorage<PoiSection> {
      @Override
      public void tick(BooleanSupplier shouldKeepTicking) {
          // Paper start - async chunk io
@@ -233,7 +233,7 @@ index 8a569e3300543cb171c3befae59969628adc424c..bbd9fdaa4b12543307b144da72b0604e
              ChunkPos chunkcoordintpair = SectionPos.of(this.dirty.firstLong()).chunk();
  
              net.minecraft.nbt.CompoundTag data;
-@@ -205,19 +335,24 @@ public class PoiManager extends SectionStorage<PoiSection> {
+@@ -204,19 +334,24 @@ public class PoiManager extends SectionStorage<PoiSection> {
              com.destroystokyo.paper.io.PaperFileIOThread.Holder.INSTANCE.scheduleSave(this.world,
                  chunkcoordintpair.x, chunkcoordintpair.z, data, null, com.destroystokyo.paper.io.PrioritizedTaskQueue.NORMAL_PRIORITY);
          }
@@ -261,7 +261,7 @@ index 8a569e3300543cb171c3befae59969628adc424c..bbd9fdaa4b12543307b144da72b0604e
      }
  
      public void checkConsistencyWithBlocks(ChunkPos chunkPos, LevelChunkSection chunkSection) {
-@@ -275,7 +410,7 @@ public class PoiManager extends SectionStorage<PoiSection> {
+@@ -274,7 +409,7 @@ public class PoiManager extends SectionStorage<PoiSection> {
  
          @Override
          protected int getLevelFromSource(long id) {
@@ -271,7 +271,7 @@ index 8a569e3300543cb171c3befae59969628adc424c..bbd9fdaa4b12543307b144da72b0604e
  
          @Override
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java
-index ec7aa86514f89042c885c0515f0744318c9bdf99..ed688841b1a2a48bacf7f69f177afe136468422c 100644
+index c86996b7b680184d17a596a0a2264089d3d9a96b..c4d7bc91ae3b1e6b2e0379c2abebf42c5fbd8bb8 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java
 @@ -52,6 +52,40 @@ public class SectionStorage<R> extends RegionFileStorage implements AutoCloseabl

@@ -5,10 +5,10 @@ Subject: [PATCH] Reduce blockpos allocation from pathfinding
 
 
 diff --git a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-index 16b3b4a168e37f0b4c8d6c41a4e3a4095f26115e..5e28c09d782166be6d0fbc6778ef9f6c4d7af409 100644
+index 6e08565e94681b6903ff1686a9d1ec0d77650c87..9f8f767e0b480a356ae717d508e817b576f69ec0 100644
 --- a/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
 +++ b/src/main/java/net/minecraft/world/level/pathfinder/WalkNodeEvaluator.java
-@@ -471,7 +471,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+@@ -473,7 +473,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
                              return BlockPathTypes.DANGER_FIRE;
                          }
  
@@ -17,7 +17,7 @@ index 16b3b4a168e37f0b4c8d6c41a4e3a4095f26115e..5e28c09d782166be6d0fbc6778ef9f6c
                              return BlockPathTypes.WATER_BORDER;
                          }
                          } // Paper
-@@ -502,7 +502,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
+@@ -504,7 +504,7 @@ public class WalkNodeEvaluator extends NodeEvaluator {
              } else if (blockState.is(Blocks.COCOA)) {
                  return BlockPathTypes.COCOA;
              } else {

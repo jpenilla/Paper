@@ -14,7 +14,7 @@ Adds flying monsters to control ghast and phantoms
 Adds villagers as separate config
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index e6408251ed836715f324b1c1e49ff2473f0963ae..db123ef36fc4cb0206349ac696572714b806454c 100644
+index 4f21dad92aa98517a42dfb0c257a2665d7c48f15..66552855fa1d2eacc6e722428993bd5b9c07d960 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -2,7 +2,6 @@ package net.minecraft.server.level;
@@ -188,7 +188,7 @@ index ff458abb221daaddaa734811eaaa35ea43883343..d1ab31d03ae421e628448fe2492ff138
      public float getWalkTargetValue(BlockPos pos) {
          return this.getWalkTargetValue(pos, this.level);
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
-index 30bf98ad7fad6c6fdc8bc48e9f4caa0443cdb31c..2bb32378b19a21c94ff3ec8ed32fc9d6f0ad0fdb 100644
+index a4811e24cbbd83d4ae8b0a3285049eb8ab1b0dcb..8e591383821395c93bfc068ea9654c3ca1e0e8bb 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
 @@ -33,6 +33,7 @@ public class GoalSelector {
@@ -218,10 +218,10 @@ index 30bf98ad7fad6c6fdc8bc48e9f4caa0443cdb31c..2bb32378b19a21c94ff3ec8ed32fc9d6
 +    }
 +    // Paper end
      public void removeGoal(Goal goal) {
-         this.availableGoals.stream().filter((wrappedGoal) -> {
+         this.availableGoals.stream().filter(wrappedGoal -> {
              return wrappedGoal.getGoal() == goal;
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/MoveToBlockGoal.java b/src/main/java/net/minecraft/world/entity/ai/goal/MoveToBlockGoal.java
-index 8d8cce87acc5a93afb4b8925a5a5dbf71d371fcd..7fc40bb5fb6265b283c7c611f63aae76302c0eaf 100644
+index 0166011f4875cdda1584d8ab6ae695ac8de48405..26b63bd02a3d999f7a33ac6eeb84f178b6557211 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/MoveToBlockGoal.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/MoveToBlockGoal.java
 @@ -14,7 +14,7 @@ public abstract class MoveToBlockGoal extends Goal {
@@ -311,7 +311,7 @@ index fc47ef685539addfcfc6b5defea8936fbca9f69d..55b44d0391e9b946536f070ea5bbdd19
          super.customServerAiStep();
      }
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 62f5d137e27b51eaf54d2f84b10bb22f3df216af..77e58257dc3fb517aeca8f8436a4279aa133b570 100644
+index dac62bad9def39aba8fe7bebf1631eccde9cbf00..615204f7e3095fcd65099a1b752635fa08d44d25 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -157,6 +157,12 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
@@ -328,7 +328,7 @@ index 62f5d137e27b51eaf54d2f84b10bb22f3df216af..77e58257dc3fb517aeca8f8436a4279a
      public final org.spigotmc.SpigotWorldConfig spigotConfig; // Spigot
  
 diff --git a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
-index 6b29f66aec8a82b367a979b5b04857416b697c14..78d252b829e5c1f19532656a728620852403760c 100644
+index a92cb7a769ceb0faa0f8b57431dd23591d25f095..4066784ba926046f5feb1f6fff708eb10b552fd8 100644
 --- a/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
 +++ b/src/main/java/net/minecraft/world/level/block/piston/PistonMovingBlockEntity.java
 @@ -140,6 +140,10 @@ public class PistonMovingBlockEntity extends BlockEntity {

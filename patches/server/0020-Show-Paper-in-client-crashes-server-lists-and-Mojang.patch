@@ -6,18 +6,18 @@ Subject: [PATCH] Show 'Paper' in client crashes, server lists, and Mojang
 
 
 diff --git a/src/main/java/net/minecraft/server/Eula.java b/src/main/java/net/minecraft/server/Eula.java
-index 2c53a400611c78236c5a1c1270d27c02e94251bf..a1d5c0f8fe2adb2ee56f3217e089211ec7c61eb0 100644
+index ac4ee4cda68c3951d9f21361af7cc5525780a490..7d72ff3379a43e8c93455b9cc526391510635633 100644
 --- a/src/main/java/net/minecraft/server/Eula.java
 +++ b/src/main/java/net/minecraft/server/Eula.java
-@@ -64,7 +64,7 @@ public class Eula {
-                 try {
-                     Properties properties = new Properties();
-                     properties.setProperty("eula", "false");
--                    properties.store(outputStream, "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).");
-+                    properties.store(outputStream, "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).\nYou also agree that tacos are tasty, and the best food in the world.");  // Paper - fix lag;
-                 } catch (Throwable var5) {
-                     if (outputStream != null) {
-                         try {
+@@ -45,7 +45,7 @@ public class Eula {
+             try (OutputStream outputStream = Files.newOutputStream(this.file)) {
+                 Properties properties = new Properties();
+                 properties.setProperty("eula", "false");
+-                properties.store(outputStream, "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).");
++                properties.store(outputStream, "By changing the setting below to TRUE you are indicating your agreement to our EULA (https://account.mojang.com/documents/minecraft_eula).\nYou also agree that tacos are tasty, and the best food in the world.");  // Paper - fix lag;
+             } catch (Exception var6) {
+                 LOGGER.warn("Failed to save {}", this.file, var6);
+             }
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
 index 844f24fd16aac25bf681bd3e98f0737be62bead6..f1dfb56d0158d36b583b5ee5596235540b2cb11c 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java

@@ -19,10 +19,10 @@ index 57a17458dbe1629ebbf58fea9f43f09511b91fb0..dda38820f763f93513b5d83a4239197b
  
      @Override
 diff --git a/src/main/java/net/minecraft/world/entity/ai/navigation/GroundPathNavigation.java b/src/main/java/net/minecraft/world/entity/ai/navigation/GroundPathNavigation.java
-index a9fd90d5282bd013e031b9d7481e3f777d6892c6..a6f8ca71ba5d107cfbd24b8e8a225195dc233637 100644
+index f7a6dcd70442461a62de73b13739773bdb1080ee..efa838624a779d10011b2a74ae9bf30808f5d59f 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/navigation/GroundPathNavigation.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/navigation/GroundPathNavigation.java
-@@ -69,7 +69,7 @@ public class GroundPathNavigation extends PathNavigation {
+@@ -73,7 +73,7 @@ public class GroundPathNavigation extends PathNavigation {
  
      @Override
      public Path createPath(Entity entity, int distance) {
@@ -32,7 +32,7 @@ index a9fd90d5282bd013e031b9d7481e3f777d6892c6..a6f8ca71ba5d107cfbd24b8e8a225195
  
      private int getSurfaceY() {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/navigation/PathNavigation.java b/src/main/java/net/minecraft/world/entity/ai/navigation/PathNavigation.java
-index 80c172b57857a19d5f78c6f06335dc7c957ccbb6..e10d377eb7540ed54ddcb6632afc2395c021b8ab 100644
+index c2c225d6230be339caf19f419785b2f8a6e09b59..9b6eaddd701e3a7a4e38cfbed3d2a2d9c5f9c01b 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/navigation/PathNavigation.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/navigation/PathNavigation.java
 @@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;

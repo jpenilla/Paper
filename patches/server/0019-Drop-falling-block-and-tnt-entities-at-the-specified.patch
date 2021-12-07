@@ -64,7 +64,7 @@ index 9fa752370a43f6d91c019316914a033f213e7126..1f61dcc3d6f33f69fbebaaaee0554403
          if (this.onGround) {
              this.setDeltaMovement(this.getDeltaMovement().multiply(0.7D, -0.5D, 0.7D));
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/MinecartTNT.java b/src/main/java/net/minecraft/world/entity/vehicle/MinecartTNT.java
-index 01d3247501ad228882e9e0a03f964a18e051d4c4..4572a3cf0a067b64f2bd6c31139a773cddf4e872 100644
+index e81322b517c7004e6e45a0d71874b8cc794acaf4..c7daa85ebb74d2b77fb60308c7fb038c369e911a 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/MinecartTNT.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/MinecartTNT.java
 @@ -45,6 +45,12 @@ public class MinecartTNT extends AbstractMinecart {
@@ -78,5 +78,5 @@ index 01d3247501ad228882e9e0a03f964a18e051d4c4..4572a3cf0a067b64f2bd6c31139a773c
 +            }
 +            // Paper end
              --this.fuse;
-             this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 0.5D, this.getZ(), 0.0D, 0.0D, 0.0D);
+             this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 0.5, this.getZ(), 0.0, 0.0, 0.0);
          } else if (this.fuse == 0) {

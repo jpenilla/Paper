@@ -1043,7 +1043,7 @@ index 0000000000000000000000000000000000000000..80a2dfb266ae1221680a7b24fee2f7e2
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundLevelChunkPacketData.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundLevelChunkPacketData.java
-index dba11f277f3703e1ee7f5a62f021d319e4ab18fc..0e75764c108c24b3e2c453f2b4f14e798add0eb4 100644
+index de2549f2df3b46d686e209fe11760457a320c3f3..4d6901267b7ffcdf54266c8ad6239158187dd400 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundLevelChunkPacketData.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundLevelChunkPacketData.java
 @@ -33,7 +33,10 @@ public class ClientboundLevelChunkPacketData {
@@ -1315,7 +1315,7 @@ index 50b6ecfea7a342be0d21e37ae87777a4b4860026..512f53b24de14ea48eab85a0e725556d
  
      public int getSerializedSize() {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
-index 911bf2b7bbe627f98d21681b0c6d5b8a5170c8a8..cdd357a8dd82cfd2a8abd45c1b7937b409af4b05 100644
+index e845136790d50a545660ab1de9df31c0830189e2..fb7d128f8a39f84d0725d6a81e3208b5a2867f4f 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
 @@ -29,6 +29,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
@@ -1334,13 +1334,13 @@ index 911bf2b7bbe627f98d21681b0c6d5b8a5170c8a8..cdd357a8dd82cfd2a8abd45c1b7937b4
 +    // Paper start - Anti-Xray - Add preset values
 +    @Deprecated public static <T> Codec<PalettedContainer<T>> codec(IdMap<T> idList, Codec<T> entryCodec, PalettedContainer.Strategy provider, T object) { return PalettedContainer.codec(idList, entryCodec, provider, object, null); } // Notice for updates: Please make sure this function isn't used anywhere
 +    public static <T> Codec<PalettedContainer<T>> codec(IdMap<T> idList, Codec<T> entryCodec, PalettedContainer.Strategy provider, T object, T[] presetValues) {
-         return RecordCodecBuilder.create((instance) -> {
+         return RecordCodecBuilder.<DiscData<T>>create(instance -> { // Paper - decompile fix
              return instance.group(entryCodec.mapResult(ExtraCodecs.orElsePartial(object)).listOf().fieldOf("palette").forGetter(PalettedContainer.DiscData::paletteEntries), Codec.LONG_STREAM.optionalFieldOf("data").forGetter(PalettedContainer.DiscData::storage)).apply(instance, PalettedContainer.DiscData::new);
-         }).comapFlatMap((serialized) -> {
+         }).comapFlatMap(serialized -> {
 -            return read(idList, provider, serialized);
 +            return read(idList, provider, serialized, object, presetValues);
 +            // Paper end
-         }, (container) -> {
+         }, container -> {
              return container.write(idList, provider);
          });
      }
@@ -1488,7 +1488,7 @@ index 911bf2b7bbe627f98d21681b0c6d5b8a5170c8a8..cdd357a8dd82cfd2a8abd45c1b7937b4
      }
  
      public void count(PalettedContainer.CountConsumer<T> counter) {
-@@ -304,9 +373,20 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -303,9 +372,20 @@ public class PalettedContainer<T> implements PaletteResize<T> {
              return 1 + this.palette.getSerializedSize() + FriendlyByteBuf.getVarIntSize(this.storage.getSize()) + this.storage.getRaw().length * 8;
          }
  

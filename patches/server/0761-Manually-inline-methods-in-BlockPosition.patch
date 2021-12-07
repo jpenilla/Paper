@@ -5,7 +5,7 @@ Subject: [PATCH] Manually inline methods in BlockPosition
 
 
 diff --git a/src/main/java/net/minecraft/core/BlockPos.java b/src/main/java/net/minecraft/core/BlockPos.java
-index 0dcf75c5c792650d7a5b9354222df16bcd1cfbd2..14610e6144ec144ebbec6fb0945c67bb0ea86795 100644
+index 0d4f64976f1810258fa7355366a99feb4dd6c74f..52ee734e83c90fb7e72a838753153f2a768a0d63 100644
 --- a/src/main/java/net/minecraft/core/BlockPos.java
 +++ b/src/main/java/net/minecraft/core/BlockPos.java
 @@ -484,9 +484,9 @@ public class BlockPos extends Vec3i {
@@ -45,7 +45,7 @@ index 0dcf75c5c792650d7a5b9354222df16bcd1cfbd2..14610e6144ec144ebbec6fb0945c67bb
          }
          // Paper end
 diff --git a/src/main/java/net/minecraft/core/Vec3i.java b/src/main/java/net/minecraft/core/Vec3i.java
-index 6de2ea6641433206027015695a0d10c80fe0e2f5..b9d30deecb63efd4cd8c840b710edba5b956bd93 100644
+index eb902f1793c0dd05659de414f5b6095282d519d7..2f873738799d7dbb9b8e286b100a0639d2e6c6ac 100644
 --- a/src/main/java/net/minecraft/core/Vec3i.java
 +++ b/src/main/java/net/minecraft/core/Vec3i.java
 @@ -19,9 +19,9 @@ public class Vec3i implements Comparable<Vec3i> {
@@ -60,4 +60,4 @@ index 6de2ea6641433206027015695a0d10c80fe0e2f5..b9d30deecb63efd4cd8c840b710edba5
 +    protected int z; // Paper - protected
  
      private static Function<Vec3i, DataResult<Vec3i>> checkOffsetAxes(int maxAbsValue) {
-         return (vec) -> {
+         return vec -> {

@@ -12,7 +12,7 @@ Co-authored-by: Dylan Xaldin <Puremin0rez515@gmail.com>
 Co-authored-by: pop4959 <pop4959@gmail.com>
 
 diff --git a/src/main/java/net/minecraft/world/level/biome/TheEndBiomeSource.java b/src/main/java/net/minecraft/world/level/biome/TheEndBiomeSource.java
-index d090bdc063480ee6e28b0d60447ebe4063e6d688..ff0255e7f3c75e9972e8516058c234c7b58a0bd7 100644
+index ec40800e29b6942a4e668e78a25be4bd21295040..f518c0ca94240c0ffd557be6547369d3cd177bb0 100644
 --- a/src/main/java/net/minecraft/world/level/biome/TheEndBiomeSource.java
 +++ b/src/main/java/net/minecraft/world/level/biome/TheEndBiomeSource.java
 @@ -29,6 +29,16 @@ public class TheEndBiomeSource extends BiomeSource {
@@ -41,7 +41,7 @@ index d090bdc063480ee6e28b0d60447ebe4063e6d688..ff0255e7f3c75e9972e8516058c234c7
              for(int p = -12; p <= 12; ++p) {
                  long q = (long)(k + o);
                  long r = (long)(l + p);
--                if (q * q + r * r > 4096L && simplexNoise.getValue((double)q, (double)r) < (double)-0.9F) {
+-                if (q * q + r * r > 4096L && simplexNoise.getValue((double)q, (double)r) < -0.9F) {
 -                    float g = (Mth.abs((float)q) * 3439.0F + Mth.abs((float)r) * 147.0F) % 13.0F + 9.0F;
 +                // Paper start - Significantly improve end generation performance by using a noise cache
 +                long key = net.minecraft.world.level.ChunkPos.asLong((int) q, (int) r);

@@ -5,7 +5,7 @@ Subject: [PATCH] Add PlayerSetSpawnEvent
 
 
 diff --git a/src/main/java/net/minecraft/server/commands/SetSpawnCommand.java b/src/main/java/net/minecraft/server/commands/SetSpawnCommand.java
-index e95f2222814e104bf9194a96385737dffe2cb2b5..249ab7357aa19d87179fa4c3ae89d9d37f32fbfb 100644
+index f0e446b60ee5eddc9f05e076225cc42a4084b81d..4be45539d80cc8664273ab46dbb8b3bc27c859c0 100644
 --- a/src/main/java/net/minecraft/server/commands/SetSpawnCommand.java
 +++ b/src/main/java/net/minecraft/server/commands/SetSpawnCommand.java
 @@ -33,7 +33,7 @@ public class SetSpawnCommand {
@@ -18,7 +18,7 @@ index e95f2222814e104bf9194a96385737dffe2cb2b5..249ab7357aa19d87179fa4c3ae89d9d3
  
          String string = resourceKey.location().toString();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 2607dc36e0bd7a915afb0cc9e0f453a2b301c0bd..ea724b1781ea256c991fe47aa044183e20ae4d82 100644
+index e87d4071604a642c0a08129b469e707a609bf83d..6c0c1f7f4f3407164ee39abf4c87ffcc057994fd 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -1276,7 +1276,7 @@ public class ServerPlayer extends Player {
@@ -80,7 +80,7 @@ index 656c0235dfb8e7335fb7be4afc727eefb2a4188e..81650be96a25f276c4df958dc4f339c7
                      isBedSpawn = true;
                      location = new Location(worldserver1.getWorld(), vec3d.x, vec3d.y, vec3d.z, f1, 0.0F);
 diff --git a/src/main/java/net/minecraft/world/level/block/RespawnAnchorBlock.java b/src/main/java/net/minecraft/world/level/block/RespawnAnchorBlock.java
-index d620f559cdd1bd0e161a99123ef6c6f64e3302df..07e893f1859abe3c2a765694c21309d60346ca82 100644
+index e2333f1c5565ad712d06d65447795ea941b59e9f..792513bc2af998a7667644edf798acb6b8a43b8a 100644
 --- a/src/main/java/net/minecraft/world/level/block/RespawnAnchorBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/RespawnAnchorBlock.java
 @@ -73,7 +73,7 @@ public class RespawnAnchorBlock extends Block {
@@ -89,11 +89,11 @@ index d620f559cdd1bd0e161a99123ef6c6f64e3302df..07e893f1859abe3c2a765694c21309d6
                  if (serverPlayer.getRespawnDimension() != world.dimension() || !pos.equals(serverPlayer.getRespawnPosition())) {
 -                    serverPlayer.setRespawnPosition(world.dimension(), pos, 0.0F, false, true);
 +                    serverPlayer.setRespawnPosition(world.dimension(), pos, 0.0F, false, true, com.destroystokyo.paper.event.player.PlayerSetSpawnEvent.Cause.RESPAWN_ANCHOR); // Paper - PlayerSetSpawnEvent
-                     world.playSound((Player)null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                     world.playSound((Player)null, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, SoundSource.BLOCKS, 1.0F, 1.0F);
                      return InteractionResult.SUCCESS;
                  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 6a76ae601bfaa64b64bd4c62c488cd4f70953427..097f8d360fcdd96f95ece64d4d1368e36408d451 100644
+index 6a5245145ee99ee291b52d850b483e0bfcfa2c7d..3438f8515795f27357eb0021dcee620f0c17a392 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -1089,9 +1089,9 @@ public class CraftPlayer extends CraftHumanEntity implements Player {

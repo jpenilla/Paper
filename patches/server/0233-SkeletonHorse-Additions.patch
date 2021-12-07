@@ -32,10 +32,10 @@ index cad754d6b75c3c16db4fd847fdf6cb8c0ec82dde..5c70fdefeb940837950e8a9692b1ac3a
  
          this.horse.setTrap(false);
 diff --git a/src/main/java/net/minecraft/world/level/EntityGetter.java b/src/main/java/net/minecraft/world/level/EntityGetter.java
-index 0dc46471f7247e5d36c3896a0c87473072362fe6..bc3bfe8d3c2f87e2e9f167b9ff34d9ca8a696391 100644
+index f8c9aa2a2b7dd4a0dbe5b43ff6204c96cc4be41a..7ed601a92d552d5850560c6dcd6a1059558824a7 100644
 --- a/src/main/java/net/minecraft/world/level/EntityGetter.java
 +++ b/src/main/java/net/minecraft/world/level/EntityGetter.java
-@@ -89,6 +89,28 @@ public interface EntityGetter {
+@@ -90,6 +90,28 @@ public interface EntityGetter {
          return player;
      }
  

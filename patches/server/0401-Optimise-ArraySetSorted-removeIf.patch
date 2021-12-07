@@ -6,11 +6,11 @@ Subject: [PATCH] Optimise ArraySetSorted#removeIf
 Remove iterator allocation and ensure the call is always O(n)
 
 diff --git a/src/main/java/net/minecraft/util/SortedArraySet.java b/src/main/java/net/minecraft/util/SortedArraySet.java
-index d1b2ba24ef54e01c6249c3b2ca16e80f03c001a6..5f1c4c6b9e36f2d6ec43b82cc0e2cae24b800dc4 100644
+index fa34a58d3493d1af8c4780b21e61f355e29f9a92..82adf577f1cb4c3972a684b66547627a01c92f53 100644
 --- a/src/main/java/net/minecraft/util/SortedArraySet.java
 +++ b/src/main/java/net/minecraft/util/SortedArraySet.java
 @@ -22,6 +22,41 @@ public class SortedArraySet<T> extends AbstractSet<T> {
-             this.contents = (T[])castRawArray(new Object[initialCapacity]);
+             this.contents = (T[])(T[])castRawArray(new Object[initialCapacity]);
          }
      }
 +    // Paper start - optimise removeIf

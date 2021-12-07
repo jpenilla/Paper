@@ -132,7 +132,7 @@ index 72dfb7b652f515bf9df201d524a851ab56706544..b80bedb5f27b474d7f66e9e1cc38ca3b
          return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
      }
 diff --git a/src/main/java/net/minecraft/world/item/FireworkRocketItem.java b/src/main/java/net/minecraft/world/item/FireworkRocketItem.java
-index 561f98b442788814cbc6cbb7e144207d14f67ff8..543a08f920319a2547258640bafebb1e70af65c4 100644
+index 22d42a505602e1e5166881cf03be09a816d75f32..12ded969ff7d6122a3ff5f9fa298df79880bfa31 100644
 --- a/src/main/java/net/minecraft/world/item/FireworkRocketItem.java
 +++ b/src/main/java/net/minecraft/world/item/FireworkRocketItem.java
 @@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
@@ -145,7 +145,7 @@ index 561f98b442788814cbc6cbb7e144207d14f67ff8..543a08f920319a2547258640bafebb1e
  import net.minecraft.world.InteractionResultHolder;
 @@ -47,8 +48,12 @@ public class FireworkRocketItem extends Item {
              Direction direction = context.getClickedFace();
-             FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(level, context.getPlayer(), vec3.x + (double)direction.getStepX() * 0.15D, vec3.y + (double)direction.getStepY() * 0.15D, vec3.z + (double)direction.getStepZ() * 0.15D, itemStack);
+             FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(level, context.getPlayer(), vec3.x + (double)direction.getStepX() * 0.15, vec3.y + (double)direction.getStepY() * 0.15, vec3.z + (double)direction.getStepZ() * 0.15, itemStack);
              fireworkRocketEntity.spawningEntity = context.getPlayer() == null ? null : context.getPlayer().getUUID(); // Paper
 -            level.addFreshEntity(fireworkRocketEntity);
 -            itemStack.shrink(1);

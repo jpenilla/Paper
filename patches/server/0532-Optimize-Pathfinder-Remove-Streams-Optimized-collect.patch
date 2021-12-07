@@ -17,14 +17,14 @@ This lets us get faster foreach iteration, as well as avoids map lookups on
 the values when needed.
 
 diff --git a/src/main/java/net/minecraft/world/level/pathfinder/PathFinder.java b/src/main/java/net/minecraft/world/level/pathfinder/PathFinder.java
-index 118cc040f156b96a2b6357ad8817808823595629..3dc896a7ded8d5d109100a393c8299e308954d99 100644
+index 6ff973a1e93c258cd525398dbaa7bf83d102d44d..3dc896a7ded8d5d109100a393c8299e308954d99 100644
 --- a/src/main/java/net/minecraft/world/level/pathfinder/PathFinder.java
 +++ b/src/main/java/net/minecraft/world/level/pathfinder/PathFinder.java
 @@ -35,27 +35,31 @@ public class PathFinder {
          this.openSet.clear();
          this.nodeEvaluator.prepare(world, mob);
          Node node = this.nodeEvaluator.getStart();
--        Map<Target, BlockPos> map = positions.stream().collect(Collectors.toMap((pos) -> {
+-        Map<Target, BlockPos> map = positions.stream().collect(Collectors.toMap(pos -> {
 -            return this.nodeEvaluator.getGoal((double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
 -        }, Function.identity()));
 +        // Paper start - remove streams - and optimize collection
@@ -95,9 +95,9 @@ index 118cc040f156b96a2b6357ad8817808823595629..3dc896a7ded8d5d109100a393c8299e3
              }
          }
  
--        Optional<Path> optional = !set3.isEmpty() ? set3.stream().map((target) -> {
+-        Optional<Path> optional = !set3.isEmpty() ? set3.stream().map(target -> {
 -            return this.reconstructPath(target.getBestNode(), positions.get(target), true);
--        }).min(Comparator.comparingInt(Path::getNodeCount)) : set.stream().map((target) -> {
+-        }).min(Comparator.comparingInt(Path::getNodeCount)) : set.stream().map(target -> {
 -            return this.reconstructPath(target.getBestNode(), positions.get(target), false);
 -        }).min(Comparator.comparingDouble(Path::getDistToTarget).thenComparingInt(Path::getNodeCount));
 -        profiler.pop();

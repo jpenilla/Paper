@@ -19,17 +19,17 @@ compared to the previous stream-based implementation.
 See: https://nipafx.dev/java-stream-performance/
 
 diff --git a/src/main/java/net/minecraft/world/entity/ai/sensing/NearestItemSensor.java b/src/main/java/net/minecraft/world/entity/ai/sensing/NearestItemSensor.java
-index 7680c269c2fe0cf2a51d0ebeb34624181826d578..49f3b25d28072b61f5cc97260df61df892a58714 100644
+index ed7758cbbe845e08b4aba5648d924c34b043c343..aea4da14f6b53c703df524ab0c937d5958aa8910 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/sensing/NearestItemSensor.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/sensing/NearestItemSensor.java
 @@ -28,11 +28,15 @@ public class NearestItemSensor extends Sensor<Mob> {
              return true;
          });
          list.sort(Comparator.comparingDouble(entity::distanceToSqr));
--        Optional<ItemEntity> optional = list.stream().filter((itemEntity) -> {
+-        Optional<ItemEntity> optional = list.stream().filter(itemEntity -> {
 -            return entity.wantsToPickUp(itemEntity.getItem());
--        }).filter((itemEntity) -> {
--            return itemEntity.closerThan(entity, 9.0D);
+-        }).filter(itemEntity -> {
+-            return itemEntity.closerThan(entity, 9.0);
 -        }).filter(entity::hasLineOfSight).findFirst();
 -        brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, optional);
 +        // Paper start - remove streams in favour of lists
@@ -45,26 +45,27 @@ index 7680c269c2fe0cf2a51d0ebeb34624181826d578..49f3b25d28072b61f5cc97260df61df8
      }
  }
 diff --git a/src/main/java/net/minecraft/world/entity/ai/sensing/PlayerSensor.java b/src/main/java/net/minecraft/world/entity/ai/sensing/PlayerSensor.java
-index ed1b95ec694b0fe8b647964b18b8c33707fc0b47..312775d0430f793720211dc29bb293503e799d11 100644
+index 3e24da56fc57afa5d8fdcb3c32c60299272fa43e..0a44ea4b7a3f0ced26fdd8c1dc5ec3b889d38bff 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/sensing/PlayerSensor.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/sensing/PlayerSensor.java
-@@ -21,18 +21,25 @@ public class PlayerSensor extends Sensor<LivingEntity> {
+@@ -21,18 +21,26 @@ public class PlayerSensor extends Sensor<LivingEntity> {
  
      @Override
      protected void doTick(ServerLevel world, LivingEntity entity) {
--        List<Player> list = world.players().stream().filter(EntitySelector.NO_SPECTATORS).filter((player) -> {
--            return entity.closerThan(player, 16.0D);
+-        List<Player> list = world.players().stream().filter(EntitySelector.NO_SPECTATORS).filter(player -> {
+-            return entity.closerThan(player, 16.0);
 -        }).sorted(Comparator.comparingDouble(entity::distanceToSqr)).collect(Collectors.toList());
++        // Paper start
 +        List<Player> players = new java.util.ArrayList<>(world.players());
 +        players.removeIf(player -> !EntitySelector.NO_SPECTATORS.test(player) || !entity.closerThan(player, 16.0D));
 +        players.sort(Comparator.comparingDouble(entity::distanceTo));
          Brain<?> brain = entity.getBrain();
 -        brain.setMemory(MemoryModuleType.NEAREST_PLAYERS, list);
--        List<Player> list2 = list.stream().filter((player) -> {
+-        List<Player> list2 = list.stream().filter(player -> {
 -            return isEntityTargetable(entity, player);
 -        }).collect(Collectors.toList());
 -        brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_PLAYER, list2.isEmpty() ? null : list2.get(0));
--        Optional<Player> optional = list2.stream().filter((player) -> {
+-        Optional<Player> optional = list2.stream().filter(player -> {
 -            return isEntityAttackable(entity, player);
 -        }).findFirst();
 -        brain.setMemory(MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER, optional);

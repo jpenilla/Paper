@@ -74,27 +74,24 @@ index a30780611b6842e35579f0ca11d75161bf365c70..4be2833b03d24e5d87c23f04c248fbe4
  
      public void clientTick(Level world, BlockPos pos) {
 diff --git a/src/main/java/net/minecraft/world/level/EntityGetter.java b/src/main/java/net/minecraft/world/level/EntityGetter.java
-index c65d1dc6eb0c1fc7c4a91faf0f1c6f26b3c2a76e..0dc46471f7247e5d36c3896a0c87473072362fe6 100644
+index 272d0bbcd26d0c95621f8f6a2f26e35f4680a40e..f8c9aa2a2b7dd4a0dbe5b43ff6204c96cc4be41a 100644
 --- a/src/main/java/net/minecraft/world/level/EntityGetter.java
 +++ b/src/main/java/net/minecraft/world/level/EntityGetter.java
-@@ -71,8 +71,8 @@ public interface EntityGetter {
+@@ -71,6 +71,7 @@ public interface EntityGetter {
          }
      }
  
--    @Nullable
--    default Player getNearestPlayer(double x, double y, double z, double maxDistance, @Nullable Predicate<Entity> targetPredicate) {
-+    default Player findNearbyPlayer(Entity entity, double d0, @Nullable Predicate<Entity> predicate) { return this.getNearestPlayer(entity.getX(), entity.getY(), entity.getZ(), d0, predicate); } // Paper
-+    @Nullable default Player getNearestPlayer(double x, double y, double z, double maxDistance, @Nullable Predicate<Entity> targetPredicate) { // Paper
-         double d = -1.0D;
-         Player player = null;
- 
-@@ -100,6 +100,27 @@ public interface EntityGetter {
++    @Nullable default Player findNearbyPlayer(Entity entity, double d0, @Nullable Predicate<Entity> predicate) { return this.getNearestPlayer(entity.getX(), entity.getY(), entity.getZ(), d0, predicate); } // Paper
+     @Nullable
+     default Player getNearestPlayer(double x, double y, double z, double maxDistance, @Nullable Predicate<Entity> targetPredicate) {
+         double d = -1.0;
+@@ -100,6 +101,27 @@ public interface EntityGetter {
          return this.getNearestPlayer(x, y, z, maxDistance, predicate);
      }
  
 +    // Paper end
 +    default boolean isAffectsSpawningPlayerNearby(double d0, double d1, double d2, double d3) {
-+        java.util.Iterator iterator = this.players().iterator();
++        java.util.Iterator<? extends Player> iterator = this.players().iterator();
 +        double d4;
 +        do {
 +            Player entityhuman;
@@ -103,7 +100,7 @@ index c65d1dc6eb0c1fc7c4a91faf0f1c6f26b3c2a76e..0dc46471f7247e5d36c3896a0c874730
 +                    return false;
 +                }
 +
-+                entityhuman = (Player) iterator.next();
++                entityhuman = iterator.next();
 +            } while (!EntitySelector.affectsSpawning.test(entityhuman));
 +
 +            d4 = entityhuman.distanceToSqr(d0, d1, d2);

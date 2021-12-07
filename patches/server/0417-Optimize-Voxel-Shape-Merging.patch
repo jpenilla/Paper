@@ -30,7 +30,7 @@ Additionally, this lets us avoid even allocating new objects for this too, furth
 reducing memory usage.
 
 diff --git a/src/main/java/net/minecraft/world/phys/shapes/IndirectMerger.java b/src/main/java/net/minecraft/world/phys/shapes/IndirectMerger.java
-index 9e0afab2329e560c4b2512548dd4b02dd1a2e69f..06662dbff8180751a8684841aa35f709007078ae 100644
+index 7149249ac8574905d1592da12c4b2b9eb9f2e41e..3f1b644d241249dbfecd4c8465d144911623ed32 100644
 --- a/src/main/java/net/minecraft/world/phys/shapes/IndirectMerger.java
 +++ b/src/main/java/net/minecraft/world/phys/shapes/IndirectMerger.java
 @@ -10,12 +10,33 @@ public class IndirectMerger implements IndexMerger {
@@ -68,7 +68,7 @@ index 9e0afab2329e560c4b2512548dd4b02dd1a2e69f..06662dbff8180751a8684841aa35f709
          this.firstIndices = new int[k];
          this.secondIndices = new int[k];
 diff --git a/src/main/java/net/minecraft/world/phys/shapes/Shapes.java b/src/main/java/net/minecraft/world/phys/shapes/Shapes.java
-index 2d273be8145bbd86ffdf33358629da7fc08b4d4c..9176735c08a75854209f24113b0e78332249dc4d 100644
+index 99a433b1b68e8d357841ab2ff3708dbc9efb0575..cb16b3f186832e0f22463f8ad5a664f408989ec8 100644
 --- a/src/main/java/net/minecraft/world/phys/shapes/Shapes.java
 +++ b/src/main/java/net/minecraft/world/phys/shapes/Shapes.java
 @@ -247,9 +247,21 @@ public final class Shapes {
@@ -98,7 +98,7 @@ index 2d273be8145bbd86ffdf33358629da7fc08b4d4c..9176735c08a75854209f24113b0e7833
              }
          }
  
--        if (first.getDouble(i) < second.getDouble(0) - 1.0E-7D) {
+-        if (first.getDouble(i) < second.getDouble(0) - 1.0E-7) {
 +        // Paper start - Identical happens more often than Disjoint
 +        if (i == j && Objects.equals(first, second)) {
 +            if (first instanceof IdenticalMerger) {
@@ -107,9 +107,9 @@ index 2d273be8145bbd86ffdf33358629da7fc08b4d4c..9176735c08a75854209f24113b0e7833
 +                return (IndexMerger) second;
 +            }
 +            return new IdenticalMerger(first);
-+        } else if (first.getDouble(i) < second.getDouble(0) - 1.0E-7D) {
++        } else if (first.getDouble(i) < second.getDouble(0) - 1.0E-7) {
              return new NonOverlappingMerger(first, second, false);
-         } else if (second.getDouble(j) < first.getDouble(0) - 1.0E-7D) {
+         } else if (second.getDouble(j) < first.getDouble(0) - 1.0E-7) {
              return new NonOverlappingMerger(second, first, true);
          } else {
 -            return (IndexMerger)(i == j && Objects.equals(first, second) ? new IdenticalMerger(first) : new IndirectMerger(first, second, includeFirst, includeSecond));

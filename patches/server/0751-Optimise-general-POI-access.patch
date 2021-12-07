@@ -785,7 +785,7 @@ index 0000000000000000000000000000000000000000..0a88c60161b04a733151c15046358f4b
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/world/entity/ai/behavior/AcquirePoi.java b/src/main/java/net/minecraft/world/entity/ai/behavior/AcquirePoi.java
-index 84a0ee595bebcc1947c602c4c06e7437706ce37c..afbb2acd27416c801af3d718850b82a170734cd3 100644
+index e17a1ee445e035fc613e323924a232f503f06c9a..a7f99923ce3046a957966d6bf810bb61e96c4d3a 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/behavior/AcquirePoi.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/behavior/AcquirePoi.java
 @@ -83,7 +83,11 @@ public class AcquirePoi extends Behavior<PathfinderMob> {
@@ -802,7 +802,7 @@ index 84a0ee595bebcc1947c602c4c06e7437706ce37c..afbb2acd27416c801af3d718850b82a1
          if (path != null && path.canReach()) {
              BlockPos blockPos = path.getTarget();
 diff --git a/src/main/java/net/minecraft/world/entity/ai/sensing/NearestBedSensor.java b/src/main/java/net/minecraft/world/entity/ai/sensing/NearestBedSensor.java
-index 0eea3e39616e40e15d1662b973c097cda3b2cee7..3ccc1421f4a5a08dadb9fe3c9fa3ac3131e6ba1e 100644
+index 3c1ba14ba926d9a970d33d7522762e9af572562f..7360bba82554dfe322043c2e0ba384444831fd8d 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/sensing/NearestBedSensor.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/sensing/NearestBedSensor.java
 @@ -49,8 +49,12 @@ public class NearestBedSensor extends Sensor<Mob> {
@@ -821,7 +821,7 @@ index 0eea3e39616e40e15d1662b973c097cda3b2cee7..3ccc1421f4a5a08dadb9fe3c9fa3ac31
                  BlockPos blockPos = path.getTarget();
                  Optional<PoiType> optional = poiManager.getType(blockPos);
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
-index 4a972b26242cf4c9d7e8f655cb1264cddad5f143..8a569e3300543cb171c3befae59969628adc424c 100644
+index 252c01b8191f1cdaf60077645df07b81052522fa..b3bd0bb1aa5f100deff0cfd0cf6b0f96ccf5a862 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
 @@ -37,7 +37,7 @@ public class PoiManager extends SectionStorage<PoiSection> {
@@ -845,7 +845,7 @@ index 4a972b26242cf4c9d7e8f655cb1264cddad5f143..8a569e3300543cb171c3befae5996962
      }
  
      public Optional<BlockPos> findClosest(Predicate<PoiType> typePredicate, BlockPos pos, int radius, PoiManager.Occupancy occupationStatus) {
--        return this.getInRange(typePredicate, pos, radius, occupationStatus).map(PoiRecord::getPos).min(Comparator.comparingDouble((blockPos2) -> {
+-        return this.getInRange(typePredicate, pos, radius, occupationStatus).map(PoiRecord::getPos).min(Comparator.comparingDouble(blockPos2 -> {
 -            return blockPos2.distSqr(pos);
 -        }));
 +        // Paper start - re-route to faster logic
@@ -855,7 +855,7 @@ index 4a972b26242cf4c9d7e8f655cb1264cddad5f143..8a569e3300543cb171c3befae5996962
      }
  
      public Optional<BlockPos> findClosest(Predicate<PoiType> typePredicate, Predicate<BlockPos> posPredicate, BlockPos pos, int radius, PoiManager.Occupancy occupationStatus) {
--        return this.getInRange(typePredicate, pos, radius, occupationStatus).map(PoiRecord::getPos).filter(posPredicate).min(Comparator.comparingDouble((blockPos2) -> {
+-        return this.getInRange(typePredicate, pos, radius, occupationStatus).map(PoiRecord::getPos).filter(posPredicate).min(Comparator.comparingDouble(blockPos2 -> {
 -            return blockPos2.distSqr(pos);
 -        }));
 +        // Paper start - re-route to faster logic
@@ -865,9 +865,9 @@ index 4a972b26242cf4c9d7e8f655cb1264cddad5f143..8a569e3300543cb171c3befae5996962
      }
  
      public Optional<BlockPos> take(Predicate<PoiType> typePredicate, Predicate<BlockPos> positionPredicate, BlockPos pos, int radius) {
--        return this.getInRange(typePredicate, pos, radius, PoiManager.Occupancy.HAS_SPACE).filter((poi) -> {
+-        return this.getInRange(typePredicate, pos, radius, PoiManager.Occupancy.HAS_SPACE).filter(poi -> {
 -            return positionPredicate.test(poi.getPos());
--        }).findFirst().map((poi) -> {
+-        }).findFirst().map(poi -> {
 -            poi.acquireTicket();
 -            return poi.getPos();
 -        });
@@ -886,7 +886,7 @@ index 4a972b26242cf4c9d7e8f655cb1264cddad5f143..8a569e3300543cb171c3befae5996962
      public Optional<BlockPos> getRandom(Predicate<PoiType> typePredicate, Predicate<BlockPos> positionPredicate, PoiManager.Occupancy occupationStatus, BlockPos pos, int radius, Random random) {
 -        List<PoiRecord> list = this.getInRange(typePredicate, pos, radius, occupationStatus).collect(Collectors.toList());
 -        Collections.shuffle(list, random);
--        return list.stream().filter((poi) -> {
+-        return list.stream().filter(poi -> {
 -            return positionPredicate.test(poi.getPos());
 -        }).findFirst().map(PoiRecord::getPos);
 +        // Paper start - re-route to faster logic
@@ -908,7 +908,7 @@ index 4a972b26242cf4c9d7e8f655cb1264cddad5f143..8a569e3300543cb171c3befae5996962
  
      public boolean release(BlockPos pos) {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
-index 63f283f32bdad02299d4a16c305a28c3bfbce9a8..de94f25792261c6c89986ad3dee3255c2a89357b 100644
+index 4acf1da1f5b1592794b641e5b47fa5fb15f6bdf0..6ae9a985d9e1840f5bd79ccea0e7a71c226b4142 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
 @@ -25,7 +25,7 @@ import org.apache.logging.log4j.Logger;
@@ -921,7 +921,7 @@ index 63f283f32bdad02299d4a16c305a28c3bfbce9a8..de94f25792261c6c89986ad3dee3255c
      private boolean isValid;
  
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java
-index ff6cadec530dedf9efc5d6226e48a096a1073ad6..d73b99d7fde724da4503b5176c3ad7b013197c6a 100644
+index b7daf44eda0cd677a097d846dd9e481fe849ef79..665063171597af0b626772e61c2e409876801c39 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java
 @@ -61,11 +61,11 @@ public class SectionStorage<R> extends RegionFileStorage implements AutoCloseabl

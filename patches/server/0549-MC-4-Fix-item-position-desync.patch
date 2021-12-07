@@ -25,20 +25,20 @@ index f20497eb1202e3e4c256f6cf04f8644a2413fe27..d48c8e3408510cacc148e8071af95994
          for (Map.Entry<String, Command> entry : commands.entrySet()) {
              MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Paper", entry.getValue());
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundMoveEntityPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundMoveEntityPacket.java
-index b30c08bfb8c55161543a4ef09f2e462e0a1fe4ae..ec93f5300cc7d423ec0d292f0f8443f900d72dab 100644
+index 2e1a3af7ea7d56661eb4e1f54b3c478cb88b3e9a..701869b36329318b8fbc89971871163f8fa09638 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundMoveEntityPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundMoveEntityPacket.java
 @@ -21,11 +21,11 @@ public abstract class ClientboundMoveEntityPacket implements Packet<ClientGamePa
      protected final boolean hasPos;
  
      public static long entityToPacket(double coord) {
--        return Mth.lfloor(coord * 4096.0D);
-+        return Mth.lfloor(coord * 4096.0D); // Paper - check ItemEntity#setPosRaw on update
+-        return Mth.lfloor(coord * 4096.0);
++        return Mth.lfloor(coord * 4096.0); // Paper - check ItemEntity#setPosRaw on update
      }
  
      public static double packetToEntity(long coord) {
--        return (double)coord / 4096.0D;
-+        return (double)coord / 4096.0D; // Paper - check ItemEntity#setPosRaw on update
+-        return (double)coord / 4096.0;
++        return (double)coord / 4096.0; // Paper - check ItemEntity#setPosRaw on update
      }
  
      public Vec3 updateEntityPosition(Vec3 orig) {

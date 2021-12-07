@@ -71,7 +71,7 @@ index e5f071c6449dc12cfed939b6b8a21a20cd7c38f7..d105b4133a906342a8ee76df3030cef8
              public void windowClosing(WindowEvent windowevent) {
                  if (!servergui.isClosing.getAndSet(true)) {
 diff --git a/src/main/java/net/minecraft/server/gui/StatsComponent.java b/src/main/java/net/minecraft/server/gui/StatsComponent.java
-index 4c5059805715bbca53196bcabd7eda550a46c34d..88f10d729aa1e0a01790521821d691a0ecd373a2 100644
+index 3179d9715a656b033a401f0b5239d29f3adadfbb..6aacf90a50629e158cb873c295be0e0b0e0d21a3 100644
 --- a/src/main/java/net/minecraft/server/gui/StatsComponent.java
 +++ b/src/main/java/net/minecraft/server/gui/StatsComponent.java
 @@ -35,8 +35,17 @@ public class StatsComponent extends JComponent {
@@ -86,10 +86,10 @@ index 4c5059805715bbca53196bcabd7eda550a46c34d..88f10d729aa1e0a01790521821d691a0
 +            tpsAvg[g] = format( tps[g] );
 +        }
          this.msgs[0] = "Memory use: " + l / 1024L / 1024L + " mb (" + Runtime.getRuntime().freeMemory() * 100L / Runtime.getRuntime().maxMemory() + "% free)";
-         this.msgs[1] = "Avg tick: " + DECIMAL_FORMAT.format(this.getAverage(this.server.tickTimes) * 1.0E-6D) + " ms";
+         this.msgs[1] = "Avg tick: " + DECIMAL_FORMAT.format(this.getAverage(this.server.tickTimes) * 1.0E-6) + " ms";
 +        this.msgs[2] = "TPS from last 1m, 5m, 15m: " + String.join(", ", tpsAvg);
 +        // Paper end
-         this.values[this.vp++ & 255] = (int)(l * 100L / Runtime.getRuntime().maxMemory());
+         this.values[this.vp++ & 0xFF] = (int)(l * 100L / Runtime.getRuntime().maxMemory());
          this.repaint();
      }
 @@ -76,4 +85,10 @@ public class StatsComponent extends JComponent {

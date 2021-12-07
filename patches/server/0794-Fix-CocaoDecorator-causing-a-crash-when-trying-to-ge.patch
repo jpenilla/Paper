@@ -6,7 +6,7 @@ Subject: [PATCH] Fix CocaoDecorator causing a crash when trying to generate
 
 
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/CocoaDecorator.java b/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/CocoaDecorator.java
-index c1d220726ca0877fb526e710ae07329b4705a8e5..4474586d199a12f1311ee3ad307b342f4be3690e 100644
+index 0045ec60724f2fc60e16a78305af52af9d2602c7..079cb3c5f00b01755f696eb3a1b6486727ca85b9 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/CocoaDecorator.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/treedecorators/CocoaDecorator.java
 @@ -29,6 +29,7 @@ public class CocoaDecorator extends TreeDecorator {
@@ -16,4 +16,4 @@ index c1d220726ca0877fb526e710ae07329b4705a8e5..4474586d199a12f1311ee3ad307b342f
 +        if (logPositions.isEmpty()) return; // Paper
          if (!(random.nextFloat() >= this.probability)) {
              int i = logPositions.get(0).getY();
-             logPositions.stream().filter((pos) -> {
+             logPositions.stream().filter(pos -> {

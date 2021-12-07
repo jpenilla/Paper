@@ -54,13 +54,13 @@ index 77249825f3d29cdde19d0562caaa95ab862fad54..1ec3fd560a2b6528040bca68be4a05c9
                  object = CrossbowItem.getArrow(world, shooter, crossbow, projectile);
                  if (creative || simulated != 0.0F) {
 diff --git a/src/main/java/net/minecraft/world/item/FireworkRocketItem.java b/src/main/java/net/minecraft/world/item/FireworkRocketItem.java
-index 409b3c50b87cafba69259ab2232ef607bfce755a..10385dcb851bb435821afba322ed11f59e7ad3e6 100644
+index f4ecb02f8d431256404719f9b02422e3b8885295..85d992a371893601b3b406e810fd8fd6fec7213f 100644
 --- a/src/main/java/net/minecraft/world/item/FireworkRocketItem.java
 +++ b/src/main/java/net/minecraft/world/item/FireworkRocketItem.java
 @@ -46,6 +46,7 @@ public class FireworkRocketItem extends Item {
              Vec3 vec3 = context.getClickLocation();
              Direction direction = context.getClickedFace();
-             FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(level, context.getPlayer(), vec3.x + (double)direction.getStepX() * 0.15D, vec3.y + (double)direction.getStepY() * 0.15D, vec3.z + (double)direction.getStepZ() * 0.15D, itemStack);
+             FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(level, context.getPlayer(), vec3.x + (double)direction.getStepX() * 0.15, vec3.y + (double)direction.getStepY() * 0.15, vec3.z + (double)direction.getStepZ() * 0.15, itemStack);
 +            fireworkRocketEntity.spawningEntity = context.getPlayer() == null ? null : context.getPlayer().getUUID(); // Paper
              level.addFreshEntity(fireworkRocketEntity);
              itemStack.shrink(1);

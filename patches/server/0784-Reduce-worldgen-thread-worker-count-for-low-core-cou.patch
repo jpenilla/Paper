@@ -5,12 +5,12 @@ Subject: [PATCH] Reduce worldgen thread worker count for low core count CPUs
 
 
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index f4b8dca0a3cbccb55b23b2408e9a17185fd2896f..faffd25b11836915764add5c6afd63cfe424979a 100644
+index be53807fa741a05538ecdf45e71a7274c86e9f2f..d025c001f2c9dd8cfd6f4677ac9bbdac182f437c 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
 @@ -124,7 +124,19 @@ public class Util {
  
-     private static ExecutorService makeExecutor(String s, int priorityModifier) { // Paper - add priority
+     private static ExecutorService makeExecutor(String s, int priorityModifier) { // Paper - add priorityModifier param
          // Paper start - use simpler thread pool that allows 1 thread
 -        int i = Math.min(8, Math.max(Runtime.getRuntime().availableProcessors() - 2, 1));
 +        // Paper start - also try to avoid suffocating the system with the worldgen workers

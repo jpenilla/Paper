@@ -9,7 +9,7 @@ itself, so the criterion object stores no references - and thus
 needs no cleanup.
 
 diff --git a/src/main/java/net/minecraft/advancements/critereon/SimpleCriterionTrigger.java b/src/main/java/net/minecraft/advancements/critereon/SimpleCriterionTrigger.java
-index 06fc39b19385d36fd0c5bb9a7042a238eb6e8a57..bb1f0e9dbcb792d015d1cb65664a96fdd3e0489e 100644
+index 42446ab3761a0b5bb01fd71155d6e217c37cea23..9373160ef9546527680412a18d0cf297e4d4a846 100644
 --- a/src/main/java/net/minecraft/advancements/critereon/SimpleCriterionTrigger.java
 +++ b/src/main/java/net/minecraft/advancements/critereon/SimpleCriterionTrigger.java
 @@ -14,22 +14,24 @@ import net.minecraft.server.level.ServerPlayer;
@@ -23,8 +23,8 @@ index 06fc39b19385d36fd0c5bb9a7042a238eb6e8a57..bb1f0e9dbcb792d015d1cb65664a96fd
  
      @Override
      public final void addPlayerListener(PlayerAdvancements manager, CriterionTrigger.Listener<T> conditions) {
--        this.players.computeIfAbsent(manager, (managerx) -> {
-+        manager.criterionData.computeIfAbsent(this, (managerx) -> { // Paper - fix AdvancementDataPlayer leak
+-        this.players.computeIfAbsent(manager, managerx -> {
++        manager.criterionData.computeIfAbsent(this, managerx -> { // Paper - fix AdvancementDataPlayer leak
              return Sets.newHashSet();
          }).add(conditions);
      }

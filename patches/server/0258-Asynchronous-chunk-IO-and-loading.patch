@@ -2582,7 +2582,7 @@ index 488682910779bcfbd16f7658b1fb3be5f7984627..aea216ee07fc733e90bd1170e46d7590
      public CompoundTag readChunk(ChunkPos pos) throws IOException {
          CompoundTag nbttagcompound = this.read(pos);
 diff --git a/src/main/java/net/minecraft/server/level/ServerChunkCache.java b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
-index 9090bc174c0ccb542616e756be66967f55f0a626..1dc1005142f822c05eb9065b4a5da456ec936ff2 100644
+index 87c9a7ffc69206554cf37c7d2c9939eb3cbea3a9..7b391d6ab84eeaed7bdd27ea70d5e3f9690a0abf 100644
 --- a/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 +++ b/src/main/java/net/minecraft/server/level/ServerChunkCache.java
 @@ -502,10 +502,111 @@ public class ServerChunkCache extends ChunkSource {
@@ -2744,7 +2744,7 @@ index 9090bc174c0ccb542616e756be66967f55f0a626..1dc1005142f822c05eb9065b4a5da456
          } finally {
              chunkMap.callbackExecutor.run();
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 9a9ae2cac9f44e38f58bd58c279fc648ec728032..e1f8d771775acef29b8e4808a69d8e3a37070a28 100644
+index f8e22d5b9fec74191f642d21e4f2975ca08e2b7b..70482e0cb454d3453caff2c7d89d1bea85c3db09 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -307,6 +307,78 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -2866,7 +2866,7 @@ index 5706d52d89bcec1d5da44ebf24f1b94cad59d359..136b5972f4faa4f43bc49b9c282a6578
          StringReader stringreader = new StringReader(packet.getCommand());
  
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
-index 2b60fc107c309958ec3f20539b243d32765f3518..4a972b26242cf4c9d7e8f655cb1264cddad5f143 100644
+index 671edf5ae194bce13e9c8935498d4ab3c38e0457..252c01b8191f1cdaf60077645df07b81052522fa 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiManager.java
 @@ -37,9 +37,11 @@ public class PoiManager extends SectionStorage<PoiSection> {
@@ -2881,7 +2881,7 @@ index 2b60fc107c309958ec3f20539b243d32765f3518..4a972b26242cf4c9d7e8f655cb1264cd
          this.distanceTracker = new PoiManager.DistanceTracker();
      }
  
-@@ -173,7 +175,18 @@ public class PoiManager extends SectionStorage<PoiSection> {
+@@ -172,7 +174,18 @@ public class PoiManager extends SectionStorage<PoiSection> {
  
      @Override
      public void tick(BooleanSupplier shouldKeepTicking) {
@@ -2901,7 +2901,7 @@ index 2b60fc107c309958ec3f20539b243d32765f3518..4a972b26242cf4c9d7e8f655cb1264cd
          this.distanceTracker.runAllUpdates();
      }
  
-@@ -266,6 +279,35 @@ public class PoiManager extends SectionStorage<PoiSection> {
+@@ -265,6 +278,35 @@ public class PoiManager extends SectionStorage<PoiSection> {
          }
      }
  
@@ -3430,7 +3430,7 @@ index deb852aa0fb2ad55a94d3c7ee542a0cc8013be42..40830a2b231df9bbf676d8325e76c825
  
          while (objectiterator.hasNext()) {
 diff --git a/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java b/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java
-index 415ec2cb81e956526e7f4965b899c9aa04f62f2e..ff6cadec530dedf9efc5d6226e48a096a1073ad6 100644
+index 94f4e3c370d1f926286b3660d72119430ddc5f14..b7daf44eda0cd677a097d846dd9e481fe849ef79 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/storage/SectionStorage.java
 @@ -30,10 +30,10 @@ import net.minecraft.world.level.LevelHeightAccessor;
@@ -3489,7 +3489,7 @@ index 415ec2cb81e956526e7f4965b899c9aa04f62f2e..ff6cadec530dedf9efc5d6226e48a096
 -            this.worker.store(chunkPos, (CompoundTag)tag);
 +            try { this.write(chunkPos, (CompoundTag)tag); } catch (IOException ioexception) { SectionStorage.LOGGER.error("Error writing data to disk", ioexception); } // Paper - nuke IOWorker
          } else {
-             LOGGER.error("Expected compound tag, got {}", (Object)tag);
+             LOGGER.error("Expected compound tag, got {}", tag);
          }
  
      }

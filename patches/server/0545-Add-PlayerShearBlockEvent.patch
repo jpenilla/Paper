@@ -39,7 +39,7 @@ index 56d2e0ca2414c2f1fdde3f1d9a3aa3c93fb46b03..bcfd5bfa7839738396b6137effc3f66c
                      entityhuman1.broadcastBreakEvent(hand);
                  });
 diff --git a/src/main/java/net/minecraft/world/level/block/PumpkinBlock.java b/src/main/java/net/minecraft/world/level/block/PumpkinBlock.java
-index 0e8cbe7a465edc31b78b7e47a928435f9c2b6bd9..f998598a34315389dd74b82e4b9c8448f0aae253 100644
+index 12181688529fd257950ddb2e9065a25a63562a17..26a4fb1fbfcac99501217195fee9c26f262a65f7 100644
 --- a/src/main/java/net/minecraft/world/level/block/PumpkinBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/PumpkinBlock.java
 @@ -27,13 +27,24 @@ public class PumpkinBlock extends StemGrownBlock {
@@ -57,14 +57,14 @@ index 0e8cbe7a465edc31b78b7e47a928435f9c2b6bd9..f998598a34315389dd74b82e4b9c8448
                  Direction direction2 = direction.getAxis() == Direction.Axis.Y ? player.getDirection().getOpposite() : direction;
                  world.playSound((Player)null, pos, SoundEvents.PUMPKIN_CARVE, SoundSource.BLOCKS, 1.0F, 1.0F);
                  world.setBlock(pos, Blocks.CARVED_PUMPKIN.defaultBlockState().setValue(CarvedPumpkinBlock.FACING, direction2), 11);
--                ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + 0.5D + (double)direction2.getStepX() * 0.65D, (double)pos.getY() + 0.1D, (double)pos.getZ() + 0.5D + (double)direction2.getStepZ() * 0.65D, new ItemStack(Items.PUMPKIN_SEEDS, 4));
+-                ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + 0.5 + (double)direction2.getStepX() * 0.65, (double)pos.getY() + 0.1, (double)pos.getZ() + 0.5 + (double)direction2.getStepZ() * 0.65, new ItemStack(Items.PUMPKIN_SEEDS, 4));
 +                // Paper start - Add PlayerShearBlockEvent
 +                for (org.bukkit.inventory.ItemStack item : event.getDrops()) {
-+                ItemEntity itemEntity = new ItemEntity(world, (double) pos.getX() + 0.5D + (double) direction2.getStepX() * 0.65D, (double) pos.getY() + 0.1D, (double) pos.getZ() + 0.5D + (double) direction2.getStepZ() * 0.65D, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(item));
++                ItemEntity itemEntity = new ItemEntity(world, (double)pos.getX() + 0.5 + (double)direction2.getStepX() * 0.65, (double)pos.getY() + 0.1, (double)pos.getZ() + 0.5 + (double)direction2.getStepZ() * 0.65, org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(item));
 +                // Paper end
-                 itemEntity.setDeltaMovement(0.05D * (double)direction2.getStepX() + world.random.nextDouble() * 0.02D, 0.05D, 0.05D * (double)direction2.getStepZ() + world.random.nextDouble() * 0.02D);
+                 itemEntity.setDeltaMovement(0.05 * (double)direction2.getStepX() + world.random.nextDouble() * 0.02, 0.05, 0.05 * (double)direction2.getStepZ() + world.random.nextDouble() * 0.02);
                  world.addFreshEntity(itemEntity);
 +                } // Paper - Add PlayerShearBlockEvent
-                 itemStack.hurtAndBreak(1, player, (playerx) -> {
+                 itemStack.hurtAndBreak(1, player, playerx -> {
                      playerx.broadcastBreakEvent(hand);
                  });

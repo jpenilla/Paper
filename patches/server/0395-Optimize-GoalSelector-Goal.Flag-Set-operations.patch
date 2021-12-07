@@ -47,7 +47,7 @@ index 6667ecc4b7eded4e20a415cef1e1b1179e6710b8..4379b9948f1eecfe6fd7dea98e298ad5
  
      protected int adjustedTickDelay(int ticks) {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
-index 2bb32378b19a21c94ff3ec8ed32fc9d6f0ad0fdb..7fdc1cbd04a5bba9648272985f51c849b07b8223 100644
+index 8e591383821395c93bfc068ea9654c3ca1e0e8bb..7fdc1cbd04a5bba9648272985f51c849b07b8223 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/goal/GoalSelector.java
 @@ -30,10 +30,12 @@ public class GoalSelector {
@@ -68,10 +68,10 @@ index 2bb32378b19a21c94ff3ec8ed32fc9d6f0ad0fdb..7fdc1cbd04a5bba9648272985f51c849
      }
      // Paper end
      public void removeGoal(Goal goal) {
--        this.availableGoals.stream().filter((wrappedGoal) -> {
+-        this.availableGoals.stream().filter(wrappedGoal -> {
 -            return wrappedGoal.getGoal() == goal;
 -        }).filter(WrappedGoal::isRunning).forEach(WrappedGoal::stop);
--        this.availableGoals.removeIf((wrappedGoal) -> {
+-        this.availableGoals.removeIf(wrappedGoal -> {
 -            return wrappedGoal.getGoal() == goal;
 -        });
 -    }

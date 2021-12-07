@@ -58,13 +58,13 @@ index 276c444a0fddb6962818635d5fc7721a56b30784..4f240fc74fb9551d752855dcdf2a376f
  
      public List<ItemStack> getRandomItems(LootContext context) {
 diff --git a/src/main/java/net/minecraft/world/level/storage/loot/functions/SetContainerContents.java b/src/main/java/net/minecraft/world/level/storage/loot/functions/SetContainerContents.java
-index 057676201aa2d19032537832849f3857425d357a..b5c6b7280a9c6964e2ad4aa9bd4517146c98e727 100644
+index 1254b4a1882e7356f62d76b364e254ea1c45a92e..a01772ed88119039267beeab31811bb1c59171b6 100644
 --- a/src/main/java/net/minecraft/world/level/storage/loot/functions/SetContainerContents.java
 +++ b/src/main/java/net/minecraft/world/level/storage/loot/functions/SetContainerContents.java
 @@ -46,7 +46,7 @@ public class SetContainerContents extends LootItemConditionalFunction {
              NonNullList<ItemStack> nonNullList = NonNullList.create();
-             this.entries.forEach((entry) -> {
-                 entry.expand(context, (choice) -> {
+             this.entries.forEach(entry -> {
+                 entry.expand(context, choice -> {
 -                    choice.createItemStack(LootTable.createStackSplitter(nonNullList::add), context);
 +                    choice.createItemStack(LootTable.createStackSplitter(nonNullList::add, context.getLevel()), context); // Paper - preserve overstacked items
                  });

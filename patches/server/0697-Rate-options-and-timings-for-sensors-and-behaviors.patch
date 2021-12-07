@@ -28,7 +28,7 @@ index b47b7dce26805badd422c1867733ff4bfd00e9f4..b27021a42cbed3f0648a8d0903d00d03
       * Get a named timer for the specified tile entity type to track type specific timings.
       * @param entity
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 5f8e4ea63d00f62df22f4379b67058238e6fe971..aaa437f83b5784464ba443cd04bf13a1321f0921 100644
+index a374112dc1ecb55dc921d2a2202f6eab47be0d35..9e31046c1e6f1138e75aee11647b0ff9bf45503d 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -9,8 +9,10 @@ import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
@@ -166,11 +166,11 @@ index b1212e162ba938b3abe0df747a633ba9cbbe57c8..c24ff2ef1054523e58892c2b35080cff
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/ai/sensing/Sensor.java b/src/main/java/net/minecraft/world/entity/ai/sensing/Sensor.java
-index c940a910a435b20297eca493c7b27fd69be54e86..f3b8e253a5bfc3f68121dbe656ae7e2ac0f0eb1c 100644
+index 5a119d8db305bca32cb629667cdb5d0589e8fdcd..cf76cbea6b9741fdae463f4a49a02a10a51f9f2a 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/sensing/Sensor.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/sensing/Sensor.java
 @@ -19,8 +19,21 @@ public abstract class Sensor<E extends LivingEntity> {
-     private static final TargetingConditions ATTACK_TARGET_CONDITIONS_IGNORE_INVISIBILITY_AND_LINE_OF_SIGHT = TargetingConditions.forCombat().range(16.0D).ignoreLineOfSight().ignoreInvisibilityTesting();
+     private static final TargetingConditions ATTACK_TARGET_CONDITIONS_IGNORE_INVISIBILITY_AND_LINE_OF_SIGHT = TargetingConditions.forCombat().range(16.0).ignoreLineOfSight().ignoreInvisibilityTesting();
      private final int scanRate;
      private long timeToTick;
 +    // Paper start - configurable sensor tick rate and timings

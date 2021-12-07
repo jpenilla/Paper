@@ -5,7 +5,7 @@ Subject: [PATCH] MC Dev fixes
 
 
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index 486d01f5cb69c58878ad7d2fa06ee1154486e55d..58dbe9077fc12964477d6a6fb57d67c41865412c 100644
+index cd949794de6001a27481695b66ae191758504a2d..ccf0a2913a047116b309d3c41f73fdd5272d8dd9 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
 @@ -345,7 +345,7 @@ public class Util {
@@ -18,7 +18,7 @@ index 486d01f5cb69c58878ad7d2fa06ee1154486e55d..58dbe9077fc12964477d6a6fb57d67c4
  
      public static <V> CompletableFuture<List<V>> sequence(List<? extends CompletableFuture<? extends V>> futures) {
 diff --git a/src/main/java/net/minecraft/core/BlockPos.java b/src/main/java/net/minecraft/core/BlockPos.java
-index dc88152a1458dadd102989d4fc5ffd5bbc7eb523..53f438b3747ff20dd18bc757b5b672aaa9db7b81 100644
+index ea4cc1c5b1ff46b49f9d3ea6e679f7686a5bc92a..ec5b78ed53b1b7de492006e87fdd903a2fdfbadd 100644
 --- a/src/main/java/net/minecraft/core/BlockPos.java
 +++ b/src/main/java/net/minecraft/core/BlockPos.java
 @@ -375,12 +375,12 @@ public class BlockPos extends Vec3i {
@@ -39,23 +39,8 @@ index dc88152a1458dadd102989d4fc5ffd5bbc7eb523..53f438b3747ff20dd18bc757b5b672aa
                      }
                  }
              };
-diff --git a/src/main/java/net/minecraft/core/MappedRegistry.java b/src/main/java/net/minecraft/core/MappedRegistry.java
-index ed7c3ab78516056bf50a6d885b98ba5c8d8ae0cf..25a6d195c5d6ee456258d2167f8acc5eb717e187 100644
---- a/src/main/java/net/minecraft/core/MappedRegistry.java
-+++ b/src/main/java/net/minecraft/core/MappedRegistry.java
-@@ -249,10 +249,5 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
-     }
- 
-     static record RegistryEntry<T>(ResourceKey<T> key, int id, T value) {
--        RegistryEntry(ResourceKey<T> key, int rawId, T entry) {
--            this.key = key;
--            this.id = rawId;
--            this.value = entry;
--        }
-     }
- }
 diff --git a/src/main/java/net/minecraft/nbt/ListTag.java b/src/main/java/net/minecraft/nbt/ListTag.java
-index 8c37ed1d70c5874bb1bd96fe33b087d4ddc2d68e..ea68b26e506e48d8238b7ee4266e61b211d52bd2 100644
+index 0cd63b6e42cec34a8b9f76a6b2672c8c4e5fcd9d..3d426663569608e8d65ef18eeacc4916a91e930d 100644
 --- a/src/main/java/net/minecraft/nbt/ListTag.java
 +++ b/src/main/java/net/minecraft/nbt/ListTag.java
 @@ -2,9 +2,12 @@ package net.minecraft.nbt;
@@ -80,7 +65,7 @@ index 8c37ed1d70c5874bb1bd96fe33b087d4ddc2d68e..ea68b26e506e48d8238b7ee4266e61b2
      private byte type;
  
 diff --git a/src/main/java/net/minecraft/network/ConnectionProtocol.java b/src/main/java/net/minecraft/network/ConnectionProtocol.java
-index 1f70fdaf08541ad57b2046e85e156be9446b372d..ea69f11e3cd9775998679baaccdaf980ee8fd498 100644
+index 98a822ca67b35a5d90ab396ba16c3523a0b30e3c..76cd5be25fe392bd09a53cfa12bbd65e92af5d60 100644
 --- a/src/main/java/net/minecraft/network/ConnectionProtocol.java
 +++ b/src/main/java/net/minecraft/network/ConnectionProtocol.java
 @@ -15,6 +15,7 @@ import javax.annotation.Nullable;
@@ -137,36 +122,6 @@ index 1f70fdaf08541ad57b2046e85e156be9446b372d..ea69f11e3cd9775998679baaccdaf980
  
      private static final int MIN_PROTOCOL_ID = -1;
      private static final int MAX_PROTOCOL_ID = 2;
-diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundLoginPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundLoginPacket.java
-index 11d3d7d1a42f342bcbdc313fd39b379ceec3c0eb..f6e043810e654db6497be6720a9fbfb93aff12f6 100644
---- a/src/main/java/net/minecraft/network/protocol/game/ClientboundLoginPacket.java
-+++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundLoginPacket.java
-@@ -19,25 +19,6 @@ public record ClientboundLoginPacket(int playerId, boolean hardcore, GameType ga
-         }), buf.readWithCodec(RegistryAccess.RegistryHolder.NETWORK_CODEC), buf.readWithCodec(DimensionType.CODEC).get(), ResourceKey.create(Registry.DIMENSION_REGISTRY, buf.readResourceLocation()), buf.readLong(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean());
-     }
- 
--    public ClientboundLoginPacket(int playerEntityId, boolean bl, GameType previousGameMode, @Nullable GameType gameType, Set<ResourceKey<Level>> set, RegistryAccess.RegistryHolder registryHolder, DimensionType dimensionType, ResourceKey<Level> resourceKey, long l, int maxPlayers, int chunkLoadDistance, int i, boolean bl2, boolean bl3, boolean bl4, boolean bl5) {
--        this.playerId = playerEntityId;
--        this.hardcore = bl;
--        this.gameType = previousGameMode;
--        this.previousGameType = gameType;
--        this.levels = set;
--        this.registryHolder = registryHolder;
--        this.dimensionType = dimensionType;
--        this.dimension = resourceKey;
--        this.seed = l;
--        this.maxPlayers = maxPlayers;
--        this.chunkRadius = chunkLoadDistance;
--        this.simulationDistance = i;
--        this.reducedDebugInfo = bl2;
--        this.showDeathScreen = bl3;
--        this.isDebug = bl4;
--        this.isFlat = bl5;
--    }
--
-     @Override
-     public void write(FriendlyByteBuf buf) {
-         buf.writeInt(this.playerId);
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
 index b3629065ebbe601802703b8671b24c7156f12d03..4d13345f3caa0c8ec55de465fc486d50b43d1e24 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
@@ -194,7 +149,7 @@ index 062da1bddd9704f5fbc46e974e13e60cd500bbe2..ffc43e5d3d0563c9e9c171064511b2c6
      }
  
 diff --git a/src/main/java/net/minecraft/util/SortedArraySet.java b/src/main/java/net/minecraft/util/SortedArraySet.java
-index d0f6eb3981a171c0f34870cb0472599d6cca9642..d1b2ba24ef54e01c6249c3b2ca16e80f03c001a6 100644
+index 7dcbed409a80a62d674a065012d25e398258ec54..fa34a58d3493d1af8c4780b21e61f355e29f9a92 100644
 --- a/src/main/java/net/minecraft/util/SortedArraySet.java
 +++ b/src/main/java/net/minecraft/util/SortedArraySet.java
 @@ -28,7 +28,7 @@ public class SortedArraySet<T> extends AbstractSet<T> {
@@ -207,18 +162,18 @@ index d0f6eb3981a171c0f34870cb0472599d6cca9642..d1b2ba24ef54e01c6249c3b2ca16e80f
  
      public static <T> SortedArraySet<T> create(Comparator<T> comparator) {
 diff --git a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
-index 93d9b14eb8793b8ee2193f7525306a5e4f1900f6..63f283f32bdad02299d4a16c305a28c3bfbce9a8 100644
+index b1a3d8d3eb35daceaeabfdbe21fae49fc05a0b38..4acf1da1f5b1592794b641e5b47fa5fb15f6bdf0 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/village/poi/PoiSection.java
 @@ -30,7 +30,7 @@ public class PoiSection {
      private boolean isValid;
  
      public static Codec<PoiSection> codec(Runnable updateListener) {
--        return RecordCodecBuilder.create((instance) -> {
-+        return RecordCodecBuilder.<PoiSection>create((instance) -> { // Paper - decompile fix
-             return instance.group(RecordCodecBuilder.point(updateListener), Codec.BOOL.optionalFieldOf("Valid", Boolean.valueOf(false)).forGetter((poiSet) -> {
+-        return RecordCodecBuilder.create(instance -> {
++        return RecordCodecBuilder.<PoiSection>create(instance -> { // Paper - decompile fix
+             return instance.group(RecordCodecBuilder.point(updateListener), Codec.BOOL.optionalFieldOf("Valid", Boolean.valueOf(false)).forGetter(poiSet -> {
                  return poiSet.isValid;
-             }), PoiRecord.codec(updateListener).listOf().fieldOf("Records").forGetter((poiSet) -> {
+             }), PoiRecord.codec(updateListener).listOf().fieldOf("Records").forGetter(poiSet -> {
 diff --git a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java b/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
 index 8daab331dd33c7095ddd9582b091310551003fd7..ef7bde78c134ec4ad464b5b6516626109c362989 100644
 --- a/src/main/java/net/minecraft/world/item/crafting/RecipeManager.java
@@ -232,102 +187,16 @@ index 8daab331dd33c7095ddd9582b091310551003fd7..ef7bde78c134ec4ad464b5b651662610
          }));
          this.byName = Maps.newHashMap(builder.build()); // CraftBukkit
          RecipeManager.LOGGER.info("Loaded {} recipes", map1.size());
-diff --git a/src/main/java/net/minecraft/world/level/biome/Biome.java b/src/main/java/net/minecraft/world/level/biome/Biome.java
-index 0f7950458dc2dfac51ed0d56f1790395f0b03bc2..fa4544541b9c5f163b633596e73a5197cd081eb8 100644
---- a/src/main/java/net/minecraft/world/level/biome/Biome.java
-+++ b/src/main/java/net/minecraft/world/level/biome/Biome.java
-@@ -39,8 +39,32 @@ import org.apache.logging.log4j.Logger;
- 
- public final class Biome {
-     public static final Logger LOGGER = LogManager.getLogger();
--    public static final Codec<Biome> DIRECT_CODEC;
--    public static final Codec<Biome> NETWORK_CODEC;
-+    // Paper start - decompile fix: move up verbatim from static block
-+    public static final Codec<Biome> DIRECT_CODEC = RecordCodecBuilder.create((instance) -> {
-+        return instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> {
-+            return biome.climateSettings;
-+        }), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> {
-+            return biome.biomeCategory;
-+        }), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> {
-+            return biome.specialEffects;
-+        }), BiomeGenerationSettings.CODEC.forGetter((biome) -> {
-+            return biome.generationSettings;
-+        }), MobSpawnSettings.CODEC.forGetter((biome) -> {
-+            return biome.mobSettings;
-+        })).apply(instance, Biome::new);
-+    });
-+    public static final Codec<Biome> NETWORK_CODEC = RecordCodecBuilder.create((instance) -> {
-+        return instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> {
-+            return biome.climateSettings;
-+        }), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> {
-+            return biome.biomeCategory;
-+        }), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> {
-+            return biome.specialEffects;
-+        })).apply(instance, (climateSettings, biomeCategory, biomeSpecialEffects) -> {
-+            return new Biome(climateSettings, biomeCategory, biomeSpecialEffects, BiomeGenerationSettings.EMPTY, MobSpawnSettings.EMPTY);
-+        });
-+    });
-+    // Paper end
-     public static final Codec<Supplier<Biome>> CODEC = RegistryFileCodec.create(Registry.BIOME_REGISTRY, DIRECT_CODEC);
-     public static final Codec<List<Supplier<Biome>>> LIST_CODEC = RegistryFileCodec.homogeneousList(Registry.BIOME_REGISTRY, DIRECT_CODEC);
-     private static final PerlinSimplexNoise TEMPERATURE_NOISE = new PerlinSimplexNoise(new WorldgenRandom(new LegacyRandomSource(1234L)), ImmutableList.of(0));
-@@ -257,33 +281,6 @@ public final class Biome {
-         return resourceLocation == null ? super.toString() : resourceLocation.toString();
-     }
- 
--    static {
--        DIRECT_CODEC = RecordCodecBuilder.create((instance) -> {
--            return instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> {
--                return biome.climateSettings;
--            }), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> {
--                return biome.biomeCategory;
--            }), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> {
--                return biome.specialEffects;
--            }), BiomeGenerationSettings.CODEC.forGetter((biome) -> {
--                return biome.generationSettings;
--            }), MobSpawnSettings.CODEC.forGetter((biome) -> {
--                return biome.mobSettings;
--            })).apply(instance, Biome::new);
--        });
--        NETWORK_CODEC = RecordCodecBuilder.create((instance) -> {
--            return instance.group(Biome.ClimateSettings.CODEC.forGetter((biome) -> {
--                return biome.climateSettings;
--            }), Biome.BiomeCategory.CODEC.fieldOf("category").forGetter((biome) -> {
--                return biome.biomeCategory;
--            }), BiomeSpecialEffects.CODEC.fieldOf("effects").forGetter((biome) -> {
--                return biome.specialEffects;
--            })).apply(instance, (climateSettings, biomeCategory, biomeSpecialEffects) -> {
--                return new Biome(climateSettings, biomeCategory, biomeSpecialEffects, BiomeGenerationSettings.EMPTY, MobSpawnSettings.EMPTY);
--            });
--        });
--    }
--
-     public static class BiomeBuilder {
-         @Nullable
-         private Biome.Precipitation precipitation;
 diff --git a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
-index 57bc78e1a189386443abb02744e88b2fdf803a95..911bf2b7bbe627f98d21681b0c6d5b8a5170c8a8 100644
+index 1e0341bd218a5e75f6d42a8e7032ee397d3a6223..e845136790d50a545660ab1de9df31c0830189e2 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
-@@ -278,10 +278,6 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -42,7 +42,7 @@ public class PalettedContainer<T> implements PaletteResize<T> {
      }
  
-     static record Configuration<T>(Palette.Factory factory, int bits) {
--        Configuration(Palette.Factory factory, int i) {
--            this.factory = factory;
--            this.bits = i;
--        }
- 
-         public PalettedContainer.Data<T> createData(IdMap<T> idList, PaletteResize<T> listener, int size) {
-             BitStorage bitStorage = (BitStorage)(this.bits == 0 ? new ZeroBitStorage(size) : new SimpleBitStorage(this.bits, size));
-@@ -316,10 +312,6 @@ public class PalettedContainer<T> implements PaletteResize<T> {
-     }
- 
-     static record DiscData<T>(List<T> paletteEntries, Optional<LongStream> storage) {
--        DiscData(List<T> list, Optional<LongStream> optional) {
--            this.paletteEntries = list;
--            this.storage = optional;
--        }
-     }
- 
-     public abstract static class Strategy {
+     public static <T> Codec<PalettedContainer<T>> codec(IdMap<T> idList, Codec<T> entryCodec, PalettedContainer.Strategy provider, T object) {
+-        return RecordCodecBuilder.create(instance -> {
++        return RecordCodecBuilder.<DiscData<T>>create(instance -> { // Paper - decompile fix
+             return instance.group(entryCodec.mapResult(ExtraCodecs.orElsePartial(object)).listOf().fieldOf("palette").forGetter(PalettedContainer.DiscData::paletteEntries), Codec.LONG_STREAM.optionalFieldOf("data").forGetter(PalettedContainer.DiscData::storage)).apply(instance, PalettedContainer.DiscData::new);
+         }).comapFlatMap(serialized -> {
+             return read(idList, provider, serialized);

@@ -5,7 +5,7 @@ Subject: [PATCH] Remove streams from classes related villager gossip
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java b/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java
-index 971ef3d98057ede1316e07cc1e9dcb2742a42187..616e0b8e7a9846ad8ee0874c5dc3bce06de7156f 100644
+index ea94e398f77132f4d62fb8dfad7ab6b62166a443..493a035ae9282830fb1334a29bd53440d427d392 100644
 --- a/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java
 +++ b/src/main/java/net/minecraft/world/entity/ai/gossip/GossipContainer.java
 @@ -8,6 +8,7 @@ import com.mojang.serialization.Dynamic;
@@ -39,27 +39,23 @@ index 971ef3d98057ede1316e07cc1e9dcb2742a42187..616e0b8e7a9846ad8ee0874c5dc3bce0
          if (list.isEmpty()) {
              return Collections.emptyList();
          } else {
-@@ -154,9 +168,9 @@ public class GossipContainer {
- 
+@@ -155,7 +169,7 @@ public class GossipContainer {
      }
  
--    public <T> Dynamic<T> store(DynamicOps<T> dynamicOps) {
--        return new Dynamic<>(dynamicOps, dynamicOps.createList(this.unpack().map((gossipEntry) -> {
--            return gossipEntry.store(dynamicOps);
-+    public <T> Dynamic<T> store(DynamicOps<T> dynamicops) {
-+        return new Dynamic(dynamicops, dynamicops.createList(this.decompress().stream().map((reputation_b) -> {
-+            return reputation_b.store(dynamicops);
+     public <T> Dynamic<T> store(DynamicOps<T> dynamicOps) {
+-        return new Dynamic<>(dynamicOps, dynamicOps.createList(this.unpack().map(gossipEntry -> {
++        return new Dynamic<>(dynamicOps, dynamicOps.createList(this.decompress().stream().map(gossipEntry -> { // Paper
+             return gossipEntry.store(dynamicOps);
          }).map(Dynamic::getValue)));
      }
- 
 @@ -181,11 +195,23 @@ public class GossipContainer {
          final Object2IntMap<GossipType> entries = new Object2IntOpenHashMap<>();
  
          public int weightedValue(Predicate<GossipType> gossipTypeFilter) {
--            return this.entries.object2IntEntrySet().stream().filter((entry) -> {
+-            return this.entries.object2IntEntrySet().stream().filter(entry -> {
 -                return gossipTypeFilter.test(entry.getKey());
--            }).mapToInt((entry) -> {
--                return entry.getIntValue() * (entry.getKey()).weight;
+-            }).mapToInt(entry -> {
+-                return entry.getIntValue() * entry.getKey().weight;
 -            }).sum();
 +            // Paper start - Remove streams from reputation
 +            int weight = 0;

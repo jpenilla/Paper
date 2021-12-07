@@ -297,7 +297,7 @@ index 60e1111f3c2c43398f21c541248f38524f41f4fb..56e9c0d15249562ebea8eb451d4bcc9f
  
      public BlockPos getHomePos() {
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 79a231c6a2387e8b6bf1b32d02f0d3e0e1393756..02a240a3925008152ea93059db47122e7f1a40d9 100644
+index a8e0d2609978652cf07e865c1af555d47bdaaea6..103428df78d1efe805ab425f1b4085077239bdf6 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -1355,10 +1355,18 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
@@ -388,10 +388,10 @@ index 836f036550cf76f40d6e0eb8b229238d311c1e35..d5ceebee36885c6470917bc1d0952733
              }
  
 diff --git a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
-index 5bbbb10a567963a451db8cf29d8d16f1cd013a16..d850cae1ec024a557e62cd561fbca137dc2be96c 100644
+index 2d745c40f4daaf11fe362febf1b85a041fe8e374..a485186c58332a8f32959303247744c4239e6aec 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/PalettedContainer.java
-@@ -355,6 +355,14 @@ public class PalettedContainer<T> implements PaletteResize<T> {
+@@ -354,6 +354,14 @@ public class PalettedContainer<T> implements PaletteResize<T> {
          }
      }
  

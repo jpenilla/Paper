@@ -27,7 +27,7 @@ index 65bfcc218e50c05d5d1b90081b888f596bfef780..dbccf3c687cf52ca95934c274ae6949f
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/entity/EntitySection.java b/src/main/java/net/minecraft/world/level/entity/EntitySection.java
-index e3027cae3674502bdc34fdbd7002980515ffc837..07691d38960add169d24bc830ac7b951bd5afaef 100644
+index d6a8a53d19ea61195abbcf574d9ff85ff95742cd..2a12ea631ead4eb390d85ccb6b5560768b44d770 100644
 --- a/src/main/java/net/minecraft/world/level/entity/EntitySection.java
 +++ b/src/main/java/net/minecraft/world/level/entity/EntitySection.java
 @@ -13,6 +13,10 @@ public class EntitySection<T extends EntityAccess> {
@@ -68,7 +68,7 @@ index e3027cae3674502bdc34fdbd7002980515ffc837..07691d38960add169d24bc830ac7b951
  
 @@ -42,7 +60,7 @@ public class EntitySection<T extends EntityAccess> {
              for(T entityAccess : collection) {
-                 U entityAccess2 = (U)((EntityAccess)type.tryCast(entityAccess));
+                 U entityAccess2 = (U)((U)((EntityAccess)type.tryCast(entityAccess)));
                  if (entityAccess2 != null && entityAccess.getBoundingBox().intersects(box)) {
 -                    action.accept((T)entityAccess2);
 +                    action.accept(entityAccess2); // Paper - decompile fixes
@@ -76,7 +76,7 @@ index e3027cae3674502bdc34fdbd7002980515ffc837..07691d38960add169d24bc830ac7b951
              }
  
 diff --git a/src/main/java/net/minecraft/world/level/entity/EntitySectionStorage.java b/src/main/java/net/minecraft/world/level/entity/EntitySectionStorage.java
-index 13df7889b2b5249fb81c54fadf55315a4c515116..74210dc2eef63da7360b1f833bb59b278419fb2b 100644
+index f846e8aeda1aa264d87efa172406752038249b03..59d242ff79d62586367b12f82f5496b8e87d98f3 100644
 --- a/src/main/java/net/minecraft/world/level/entity/EntitySectionStorage.java
 +++ b/src/main/java/net/minecraft/world/level/entity/EntitySectionStorage.java
 @@ -111,13 +111,20 @@ public class EntitySectionStorage<T extends EntityAccess> {
@@ -88,14 +88,14 @@ index 13df7889b2b5249fb81c54fadf55315a4c515116..74210dc2eef63da7360b1f833bb59b27
 +    }
 +    public void getEntities(AABB box, Consumer<T> action, boolean isContainerSearch) {
 +        // Paper end
-         this.forEachAccessibleNonEmptySection(box, (section) -> {
+         this.forEachAccessibleNonEmptySection(box, section -> {
 +            if (isContainerSearch && section.inventoryEntityCount <= 0) return; // Paper
              section.getEntities(box, action);
          });
      }
  
      public <U extends T> void getEntities(EntityTypeTest<T, U> filter, AABB box, Consumer<U> action) {
-         this.forEachAccessibleNonEmptySection(box, (section) -> {
+         this.forEachAccessibleNonEmptySection(box, section -> {
 +            if (filter.getBaseClass() == net.minecraft.world.entity.item.ItemEntity.class && section.itemCount <= 0) return; // Paper
              section.getEntities(filter, box, action);
          });

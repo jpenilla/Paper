@@ -830,7 +830,7 @@ index d2280b9e9f107dca890bc76f0c58e7070ce4b38c..c68b95ef0d4c3e0d942e61bfccf23a00
      // Yes, this doesn't match Vanilla, but it's the best we can do for now.
      // If this is an issue, PRs are welcome
 diff --git a/src/main/java/net/minecraft/server/level/ThreadedLevelLightEngine.java b/src/main/java/net/minecraft/server/level/ThreadedLevelLightEngine.java
-index c0ef95f83f2d13025bedd4bcc7e177cee66b5470..fec2a2a9f958492eefbbffcaf8179a2fac5a4d99 100644
+index 3ca58bb71890cb5897f95236f00f016ebbe7ca25..e668f216af89f0a1a3d0090b697005be6895ef65 100644
 --- a/src/main/java/net/minecraft/server/level/ThreadedLevelLightEngine.java
 +++ b/src/main/java/net/minecraft/server/level/ThreadedLevelLightEngine.java
 @@ -1,6 +1,7 @@
@@ -1041,7 +1041,7 @@ index c0ef95f83f2d13025bedd4bcc7e177cee66b5470..fec2a2a9f958492eefbbffcaf8179a2f
              super.retainData(chunkPos, false);
 -            this.chunkMap.releaseLightTicket(chunkPos);
 -            return chunk;
--        }, (runnable) -> {
+-        }, runnable -> {
 -            this.addTask(chunkPos.x, chunkPos.z, ThreadedLevelLightEngine.TaskType.POST_UPDATE, runnable);
 +            //this.chunkMap.releaseLightTicket(chunkPos); // Paper - moved up
 +            future.complete(chunk);
@@ -1164,7 +1164,7 @@ index 96de46b0b1b4bd69b1afa689083ec57ffb07120e..40e8c0b36ec521a8850782f349eb29b4
      public float yRotO;
      public float xRotO;
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index 9cb5e608ace42acd1a5335b70d049a88f3918de5..b69ce653592575252a58cdd47052ab13fcb80f1c 100644
+index 6eaba33b7730d66bf631b6d5c6a7080f9f019f8b..8e03e63a00dd242791ba0d5a8a17922227b16165 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 @@ -141,7 +141,7 @@ public class LevelChunk extends ChunkAccess {
@@ -1210,7 +1210,7 @@ index c11bdc266434aa9d90e5ab25e185dc1a1ba57d9b..eea11a2bf87d409f484f07f207c57c86
              net.minecraft.world.level.chunk.LevelChunk chunk = (net.minecraft.world.level.chunk.LevelChunk) either.left().orElse(null);
              if (chunk != null) addTicket(x, z); // Paper
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 1b1d0742ef534becb462e2231e814604aeca7d87..fd27b0e62c3da17e7f6b948b6380d9d29422b9ba 100644
+index 1438b95e13fd6c3dcbd8e49c8f912f6c442a8962..dbd351b758a9446cf0cfc7e6ba4e16374132b35c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -909,6 +909,16 @@ public class CraftPlayer extends CraftHumanEntity implements Player {

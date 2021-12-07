@@ -113,7 +113,7 @@ index 67ff66e232592203cf8dad605ad01eabc4dded89..f357a3473682c2d37a20fb862522c67b
  
      public void clearCache() {
 diff --git a/src/main/java/net/minecraft/world/level/lighting/LayerLightSectionStorage.java b/src/main/java/net/minecraft/world/level/lighting/LayerLightSectionStorage.java
-index 99a758341d4b31cb1703fdce0a257f65ed602ca0..4f7b63f2cc8a69fa8efb3a84f6abc3d3dcf05b49 100644
+index 8b58aa1bb13febae47193918d9a2dc5968a3e7e9..010b7639e448ad8d157d9a6cb35cc6161b74d361 100644
 --- a/src/main/java/net/minecraft/world/level/lighting/LayerLightSectionStorage.java
 +++ b/src/main/java/net/minecraft/world/level/lighting/LayerLightSectionStorage.java
 @@ -28,7 +28,7 @@ public abstract class LayerLightSectionStorage<M extends DataLayerStorageMap<M>>
@@ -167,7 +167,7 @@ index 99a758341d4b31cb1703fdce0a257f65ed602ca0..4f7b63f2cc8a69fa8efb3a84f6abc3d3
          }
  
 diff --git a/src/main/java/net/minecraft/world/level/lighting/SkyLightSectionStorage.java b/src/main/java/net/minecraft/world/level/lighting/SkyLightSectionStorage.java
-index 1f6ed4309f0f5e06cd2981864feaa6ea16df0350..9797254e981d08d3934f7ca8f369dd78a6ef1a48 100644
+index 6e945626e7dc9d43da4c60d2542598947ce5c6e6..20456b7540b020cd0f940910e107630ac646a36d 100644
 --- a/src/main/java/net/minecraft/world/level/lighting/SkyLightSectionStorage.java
 +++ b/src/main/java/net/minecraft/world/level/lighting/SkyLightSectionStorage.java
 @@ -21,7 +21,7 @@ public class SkyLightSectionStorage extends LayerLightSectionStorage<SkyLightSec
@@ -201,41 +201,41 @@ index 1f6ed4309f0f5e06cd2981864feaa6ea16df0350..9797254e981d08d3934f7ca8f369dd78
      @Override
 @@ -59,13 +61,13 @@ public class SkyLightSectionStorage extends LayerLightSectionStorage<SkyLightSec
          int i = SectionPos.y(sectionPos);
-         if ((this.updatingSectionData).currentLowestY > i) {
-             (this.updatingSectionData).currentLowestY = i;
--            (this.updatingSectionData).topSections.defaultReturnValue((this.updatingSectionData).currentLowestY);
-+            (this.updatingSectionData).otherData.queueDefaultReturnValue((this.updatingSectionData).currentLowestY); // Paper - avoid copying light data
+         if (this.updatingSectionData.currentLowestY > i) {
+             this.updatingSectionData.currentLowestY = i;
+-            this.updatingSectionData.topSections.defaultReturnValue(this.updatingSectionData.currentLowestY);
++            this.updatingSectionData.otherData.queueDefaultReturnValue(this.updatingSectionData.currentLowestY); // Paper - avoid copying light data
          }
  
          long l = SectionPos.getZeroNode(sectionPos);
--        int j = (this.updatingSectionData).topSections.get(l);
-+        int j = (this.updatingSectionData).otherData.getUpdating(l); // Paper - avoid copying light data
+-        int j = this.updatingSectionData.topSections.get(l);
++        int j = this.updatingSectionData.otherData.getUpdating(l); // Paper - avoid copying light data
          if (j < i + 1) {
--            (this.updatingSectionData).topSections.put(l, i + 1);
-+            (this.updatingSectionData).otherData.queueUpdate(l, i + 1); // Paper - avoid copying light data
+-            this.updatingSectionData.topSections.put(l, i + 1);
++            this.updatingSectionData.otherData.queueUpdate(l, i + 1); // Paper - avoid copying light data
              if (this.columnsWithSkySources.contains(l)) {
                  this.queueAddSource(sectionPos);
-                 if (j > (this.updatingSectionData).currentLowestY) {
+                 if (j > this.updatingSectionData.currentLowestY) {
 @@ -102,19 +104,19 @@ public class SkyLightSectionStorage extends LayerLightSectionStorage<SkyLightSec
          }
  
          int i = SectionPos.y(sectionPos);
--        if ((this.updatingSectionData).topSections.get(l) == i + 1) {
-+        if ((this.updatingSectionData).otherData.getUpdating(l) == i + 1) { // Paper - avoid copying light data
+-        if (this.updatingSectionData.topSections.get(l) == i + 1) {
++        if (this.updatingSectionData.otherData.getUpdating(l) == i + 1) { // Paper - avoid copying light data
              long m;
              for(m = sectionPos; !this.storingLightForSection(m) && this.hasSectionsBelow(i); m = SectionPos.offset(m, Direction.DOWN)) {
                  --i;
              }
  
              if (this.storingLightForSection(m)) {
--                (this.updatingSectionData).topSections.put(l, i + 1);
-+                (this.updatingSectionData).otherData.queueUpdate(l, i + 1); // Paper - avoid copying light data
+-                this.updatingSectionData.topSections.put(l, i + 1);
++                this.updatingSectionData.otherData.queueUpdate(l, i + 1); // Paper - avoid copying light data
                  if (bl) {
                      this.queueAddSource(m);
                  }
              } else {
--                (this.updatingSectionData).topSections.remove(l);
-+                (this.updatingSectionData).otherData.queueRemove(l); // Paper - avoid copying light data
+-                this.updatingSectionData.topSections.remove(l);
++                this.updatingSectionData.otherData.queueRemove(l); // Paper - avoid copying light data
              }
          }
  
@@ -243,27 +243,27 @@ index 1f6ed4309f0f5e06cd2981864feaa6ea16df0350..9797254e981d08d3934f7ca8f369dd78
      protected void enableLightSources(long columnPos, boolean enabled) {
          this.runAllUpdates();
          if (enabled && this.columnsWithSkySources.add(columnPos)) {
--            int i = (this.updatingSectionData).topSections.get(columnPos);
-+            int i = (this.updatingSectionData).otherData.getUpdating(columnPos); // Paper - avoid copying light data
-             if (i != (this.updatingSectionData).currentLowestY) {
+-            int i = this.updatingSectionData.topSections.get(columnPos);
++            int i = this.updatingSectionData.otherData.getUpdating(columnPos); // Paper - avoid copying light data
+             if (i != this.updatingSectionData.currentLowestY) {
                  long l = SectionPos.asLong(SectionPos.x(columnPos), i - 1, SectionPos.z(columnPos));
                  this.queueAddSource(l);
 @@ -152,7 +154,7 @@ public class SkyLightSectionStorage extends LayerLightSectionStorage<SkyLightSec
              return dataLayer;
          } else {
              long l = SectionPos.offset(sectionPos, Direction.UP);
--            int i = (this.updatingSectionData).topSections.get(SectionPos.getZeroNode(sectionPos));
-+            int i = (this.updatingSectionData).otherData.getUpdating(SectionPos.getZeroNode(sectionPos)); // Paper - avoid copying light data
-             if (i != (this.updatingSectionData).currentLowestY && SectionPos.y(l) < i) {
+-            int i = this.updatingSectionData.topSections.get(SectionPos.getZeroNode(sectionPos));
++            int i = this.updatingSectionData.otherData.getUpdating(SectionPos.getZeroNode(sectionPos)); // Paper - avoid copying light data
+             if (i != this.updatingSectionData.currentLowestY && SectionPos.y(l) < i) {
                  DataLayer dataLayer2;
                  while((dataLayer2 = this.getDataLayer(l, true)) == null) {
 @@ -275,7 +277,7 @@ public class SkyLightSectionStorage extends LayerLightSectionStorage<SkyLightSec
  
      protected boolean isAboveData(long sectionPos) {
          long l = SectionPos.getZeroNode(sectionPos);
--        int i = (this.updatingSectionData).topSections.get(l);
-+        int i = (this.updatingSectionData).otherData.getUpdating(l); // Paper - avoid copying light data
-         return i == (this.updatingSectionData).currentLowestY || SectionPos.y(sectionPos) >= i;
+-        int i = this.updatingSectionData.topSections.get(l);
++        int i = this.updatingSectionData.otherData.getUpdating(l); // Paper - avoid copying light data
+         return i == this.updatingSectionData.currentLowestY || SectionPos.y(sectionPos) >= i;
      }
  
 @@ -286,18 +288,21 @@ public class SkyLightSectionStorage extends LayerLightSectionStorage<SkyLightSec

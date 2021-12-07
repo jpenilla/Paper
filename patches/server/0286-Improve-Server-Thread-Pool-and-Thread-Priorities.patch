@@ -12,7 +12,7 @@ server threads
 Allow usage of a single thread executor by not using ForkJoin so single core CPU's.
 
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index 3ed0bf0485266c0a2b459f5cc1940f85f74e3624..b9775bc4e601fe1be8e514222e56ae782a897395 100644
+index 622225eae60f6528ad39323a134e57f193c255f8..e2cbcba8667f679765f1a0d451454e0a79126f59 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
 @@ -68,8 +68,8 @@ public class Util {
@@ -26,13 +26,13 @@ index 3ed0bf0485266c0a2b459f5cc1940f85f74e3624..b9775bc4e601fe1be8e514222e56ae78
      private static final ExecutorService IO_POOL = makeIoExecutor();
      public static LongSupplier timeSource = System::nanoTime;
      public static final UUID NIL_UUID = new UUID(0L, 0L);
-@@ -105,14 +105,18 @@ public class Util {
+@@ -105,12 +105,17 @@ public class Util {
          return Instant.now().toEpochMilli();
      }
  
 -    private static ExecutorService makeExecutor(String name) {
 -        int i = Mth.clamp(Runtime.getRuntime().availableProcessors() - 1, 1, getMaxThreads());
-+    private static ExecutorService makeExecutor(String s, int priorityModifier) { // Paper - add priority
++    private static ExecutorService makeExecutor(String s, int priorityModifier) { // Paper - add priorityModifier param
 +        // Paper start - use simpler thread pool that allows 1 thread
 +        int i = Math.min(8, Math.max(Runtime.getRuntime().availableProcessors() - 2, 1));
 +        i = Integer.getInteger("Paper.WorkerThreadCount", i);
@@ -41,19 +41,18 @@ index 3ed0bf0485266c0a2b459f5cc1940f85f74e3624..b9775bc4e601fe1be8e514222e56ae78
          if (i <= 0) {
              executorService = MoreExecutors.newDirectExecutorService();
          } else {
--            executorService = new ForkJoinPool(i, (forkJoinPool) -> {
--                ForkJoinWorkerThread forkJoinWorkerThread = new ForkJoinWorkerThread(forkJoinPool) {
-+            executorService = new java.util.concurrent.ThreadPoolExecutor(i, i,0L, TimeUnit.MILLISECONDS, new java.util.concurrent.LinkedBlockingQueue<Runnable>(), target -> new net.minecraft.server.ServerWorkerThread(target, s, priorityModifier));
-+        }
++            executorService = new java.util.concurrent.ThreadPoolExecutor(i, i, 0L, TimeUnit.MILLISECONDS, new java.util.concurrent.LinkedBlockingQueue<>(), target -> new net.minecraft.server.ServerWorkerThread(target, s, priorityModifier));
 +        /*
+             executorService = new ForkJoinPool(i, forkJoinPool -> {
+                 ForkJoinWorkerThread forkJoinWorkerThread = new ForkJoinWorkerThread(forkJoinPool) {
                      @Override
-                     protected void onTermination(Throwable throwable) {
-                         if (throwable != null) {
-@@ -128,6 +132,7 @@ public class Util {
+@@ -128,6 +133,9 @@ public class Util {
                  return forkJoinWorkerThread;
              }, Util::onThreadException, true);
          }
-+        }*/ // Paper end
++        */
++        }
++        // Paper end
  
          return executorService;
      }

@@ -41,7 +41,7 @@ index bc472d86ae79437dab87454caa60d64399a14715..3f434ac77611a81889b15c118a0fca57
              if (state.getValue(BigDripleafBlock.TILT) == Tilt.NONE && BigDripleafBlock.canEntityTilt(pos, entity) && !world.hasNeighborSignal(pos)) {
                  // CraftBukkit start - tilt dripleaf
 diff --git a/src/main/java/net/minecraft/world/level/block/BubbleColumnBlock.java b/src/main/java/net/minecraft/world/level/block/BubbleColumnBlock.java
-index d99399eca5e30423f007c0e0665e8c14374c503c..ee3045133965da67611f180835fa111998f918b4 100644
+index 77c1eeb17ebc8b01a31b3d8eb86df50d6df6c418..0fd0d0d383cdd8a3400fb016076adb7c15e1fe33 100644
 --- a/src/main/java/net/minecraft/world/level/block/BubbleColumnBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/BubbleColumnBlock.java
 @@ -38,6 +38,7 @@ public class BubbleColumnBlock extends Block implements BucketPickup {
@@ -125,7 +125,7 @@ index 40fe9e093f32c65947973daa21afec58ca7976f8..b8305112c759ecb62ef9ad972e57ff85
              ResourceKey<Level> resourcekey = world.getTypeKey() == LevelStem.END ? Level.OVERWORLD : Level.END; // CraftBukkit - SPIGOT-6152: send back to main overworld in custom ends
              ServerLevel worldserver = ((ServerLevel) world).getServer().getLevel(resourcekey);
 diff --git a/src/main/java/net/minecraft/world/level/block/HoneyBlock.java b/src/main/java/net/minecraft/world/level/block/HoneyBlock.java
-index 0549256cbd7028c82bf82ccc4ff64219df7e0906..683f24251baf8ef3bef8f32ba83dc7f0e8ed7d70 100644
+index 9075775de262a61fae88812468f9e780938a0271..bc050c0274eca5a322b0afb2639e66bd39efa8a9 100644
 --- a/src/main/java/net/minecraft/world/level/block/HoneyBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/HoneyBlock.java
 @@ -55,6 +55,7 @@ public class HoneyBlock extends HalfTransparentBlock {
@@ -137,7 +137,7 @@ index 0549256cbd7028c82bf82ccc4ff64219df7e0906..683f24251baf8ef3bef8f32ba83dc7f0
              this.maybeDoSlideAchievement(entity, pos);
              this.doSlideMovement(entity);
 diff --git a/src/main/java/net/minecraft/world/level/block/HopperBlock.java b/src/main/java/net/minecraft/world/level/block/HopperBlock.java
-index 9a58f017bbaa742cbb892c804011cc9396b8607c..386c3e458babc31ad3bf2b51c20d1cfde08647ac 100644
+index 508210270b51e0946d6d82a082f84f8c11b83b5c..e768298f51d376dd466c04803b7ed9f212fdc66d 100644
 --- a/src/main/java/net/minecraft/world/level/block/HopperBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/HopperBlock.java
 @@ -200,6 +200,7 @@ public class HopperBlock extends BaseEntityBlock {
@@ -149,7 +149,7 @@ index 9a58f017bbaa742cbb892c804011cc9396b8607c..386c3e458babc31ad3bf2b51c20d1cfd
          if (blockEntity instanceof HopperBlockEntity) {
              HopperBlockEntity.entityInside(world, pos, state, entity, (HopperBlockEntity)blockEntity);
 diff --git a/src/main/java/net/minecraft/world/level/block/LavaCauldronBlock.java b/src/main/java/net/minecraft/world/level/block/LavaCauldronBlock.java
-index f0a3ef0529951e7732602d358ddea1782001db7e..6588b207d93d96934e72176874ba60c81e9a098c 100644
+index 7e28f97275312ccdc2dded63db910275334edb5c..6bdf92737c28c3a80bb76045c89b579bda9dcf59 100644
 --- a/src/main/java/net/minecraft/world/level/block/LavaCauldronBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/LavaCauldronBlock.java
 @@ -24,6 +24,7 @@ public class LavaCauldronBlock extends AbstractCauldronBlock {
@@ -233,7 +233,7 @@ index 2b2a28d0383ccc8c0e7debd90331570b02b5e65f..bd4295f8d24ca9fd8c3af31abcd13da2
              world.destroyBlock(new BlockPos(pos), true, entity);
          }
 diff --git a/src/main/java/net/minecraft/world/level/block/WebBlock.java b/src/main/java/net/minecraft/world/level/block/WebBlock.java
-index 6964308822ebf8a7027ce426062ba43a70c20c15..763fa221c562e96c2abd09c7055e91a86ac03d43 100644
+index cd128a2bbe93aaba24f0c25c9992bc73419d18e8..d1bd31d6b7da3206182c3fad91b2526771967962 100644
 --- a/src/main/java/net/minecraft/world/level/block/WebBlock.java
 +++ b/src/main/java/net/minecraft/world/level/block/WebBlock.java
 @@ -14,6 +14,7 @@ public class WebBlock extends Block {
@@ -241,7 +241,7 @@ index 6964308822ebf8a7027ce426062ba43a70c20c15..763fa221c562e96c2abd09c7055e91a8
      @Override
      public void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
 +        if (!new io.papermc.paper.event.entity.EntityInsideBlockEvent(entity.getBukkitEntity(), org.bukkit.craftbukkit.block.CraftBlock.at(world, pos)).callEvent()) { return; } // Paper
-         entity.makeStuckInBlock(state, new Vec3(0.25D, (double)0.05F, 0.25D));
+         entity.makeStuckInBlock(state, new Vec3(0.25, 0.05F, 0.25));
      }
  }
 diff --git a/src/main/java/net/minecraft/world/level/block/WitherRoseBlock.java b/src/main/java/net/minecraft/world/level/block/WitherRoseBlock.java

@@ -173,7 +173,7 @@ index 0000000000000000000000000000000000000000..57d0cd3ad6f972e986c72a57f1a6e360
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/world/level/block/state/StateHolder.java b/src/main/java/net/minecraft/world/level/block/state/StateHolder.java
-index 5c30f43ba7db43cc2613ddaf6ea0d0810d3d08d7..5be5eabc222b9e20c083ff83fae52010b19ea854 100644
+index de77bf8cf6d8f92a82c2c3ce7e5b4532a70dd59a..fdc5122168de31180d6185ece901e45fb0bcddb6 100644
 --- a/src/main/java/net/minecraft/world/level/block/state/StateHolder.java
 +++ b/src/main/java/net/minecraft/world/level/block/state/StateHolder.java
 @@ -40,11 +40,13 @@ public abstract class StateHolder<O, S> {
@@ -240,8 +240,8 @@ index 5c30f43ba7db43cc2613ddaf6ea0d0810d3d08d7..5be5eabc222b9e20c083ff83fae52010
                  }
              }
  
--            this.neighbours = (Table<Property<?>, Comparable<?>, S>)(table.isEmpty() ? table : ArrayTable.create(table));
-+            this.neighbours = (Table<Property<?>, Comparable<?>, S>)(table.isEmpty() ? table : ArrayTable.create(table)); this.optimisedTable.loadInTable((Table)this.neighbours, this.values); // Paper - optimise state lookup
+-            this.neighbours = (Table<Property<?>, Comparable<?>, S>)((Table<Property<?>, Comparable<?>, S>)(table.isEmpty() ? table : ArrayTable.create(table)));
++            this.neighbours = (Table<Property<?>, Comparable<?>, S>)((Table<Property<?>, Comparable<?>, S>)(table.isEmpty() ? table : ArrayTable.create(table))); this.optimisedTable.loadInTable((Table)this.neighbours, this.values); // Paper - optimise state lookup
          }
      }
  
@@ -264,7 +264,7 @@ index ff1a0d125edd2ea10c870cbb62ae9aa23644b6dc..233215280f8494dbc33a2fd0b14e37e5
          super(name, Boolean.class);
      }
 diff --git a/src/main/java/net/minecraft/world/level/block/state/properties/EnumProperty.java b/src/main/java/net/minecraft/world/level/block/state/properties/EnumProperty.java
-index 0bca0f971dac994bd8b6ecd87e8b33e26c0f18f9..edd3c745efb40ee79a1393199c7a27ddaa2f8026 100644
+index f629ad3f992c15687e57bb355775ae6dd1948846..0dcad816099fcd99a33fcb5d0f5df492fe73bf1d 100644
 --- a/src/main/java/net/minecraft/world/level/block/state/properties/EnumProperty.java
 +++ b/src/main/java/net/minecraft/world/level/block/state/properties/EnumProperty.java
 @@ -15,6 +15,15 @@ public class EnumProperty<T extends Enum<T> & StringRepresentable> extends Prope
@@ -320,7 +320,7 @@ index 72f508321ebffcca31240fbdd068b4d185454cbc..d16156f8a4a2507e114dc651fd0af9cd
          super(name, Integer.class);
          this.min = min;
 diff --git a/src/main/java/net/minecraft/world/level/block/state/properties/Property.java b/src/main/java/net/minecraft/world/level/block/state/properties/Property.java
-index 1d0f0099571e7295f5f83004c45b6e992a4af83a..bf4a39671425b56e7096008a8e43094eebbb2d05 100644
+index f81079e18bbe057af611fc28e0e161ff9bd7172c..419af7e46a7873e54e9d9e6ef622656619e24971 100644
 --- a/src/main/java/net/minecraft/world/level/block/state/properties/Property.java
 +++ b/src/main/java/net/minecraft/world/level/block/state/properties/Property.java
 @@ -22,6 +22,17 @@ public abstract class Property<T extends Comparable<T>> {

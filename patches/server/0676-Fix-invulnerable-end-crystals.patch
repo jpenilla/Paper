@@ -6,7 +6,7 @@ Subject: [PATCH] Fix invulnerable end crystals
 MC-108513
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 1305c1a7ae6505c1c89d2a4c2a3fbae2111e2e81..e6935a01c648773c83f0d1ad2ba0fc9e9e169d6c 100644
+index 04c91116d88b7c7b8a5886cc54f21be645998e38..478c93a4eae18047df037958720e56e94a131f1c 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -838,4 +838,9 @@ public class PaperWorldConfig {
@@ -66,13 +66,13 @@ index 78b0456a3f9e3f66d467386c3e5f68d07adf1977..d8c4f36ae0e65c6d0398fac80c93b786
      }
  
 diff --git a/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java b/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java
-index 1e53d4bef86349eaa1356444a80ae92d4311ccce..c03bf5bdb67b00c75f9fcfead882c4d944282244 100644
+index ba98c2ca1fccd680e2f3cee8a36ae1504a49e2ed..d9c83f86b0d6e9445769afcb32f8ff499e9ecb3a 100644
 --- a/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java
 +++ b/src/main/java/net/minecraft/world/level/levelgen/feature/SpikeFeature.java
 @@ -99,6 +99,7 @@ public class SpikeFeature extends Feature<SpikeConfiguration> {
          endCrystal.setBeamTarget(config.getCrystalBeamTarget());
          endCrystal.setInvulnerable(config.isCrystalInvulnerable());
-         endCrystal.moveTo((double)spike.getCenterX() + 0.5D, (double)(spike.getHeight() + 1), (double)spike.getCenterZ() + 0.5D, random.nextFloat() * 360.0F, 0.0F);
+         endCrystal.moveTo((double)spike.getCenterX() + 0.5, (double)(spike.getHeight() + 1), (double)spike.getCenterZ() + 0.5, random.nextFloat() * 360.0F, 0.0F);
 +        endCrystal.generatedByDragonFight = true; // Paper
          world.addFreshEntity(endCrystal);
          this.setBlock(world, new BlockPos(spike.getCenterX(), spike.getHeight(), spike.getCenterZ()), Blocks.BEDROCK.defaultBlockState());

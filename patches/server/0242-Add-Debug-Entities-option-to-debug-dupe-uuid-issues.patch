@@ -29,7 +29,7 @@ index fb9a82b4fabdb73e9a44bcbc20b848d8116df3e9..488682910779bcfbd16f7658b1fb3be5
  
      protected void tick() {
 diff --git a/src/main/java/net/minecraft/server/level/ServerLevel.java b/src/main/java/net/minecraft/server/level/ServerLevel.java
-index 9a51aa9f40ceaaa3500595bf08b2b5515704b91a..9a9ae2cac9f44e38f58bd58c279fc648ec728032 100644
+index af8b594e3e5ab5d7dc9e7d86f308903120c7fd72..f8e22d5b9fec74191f642d21e4f2975ca08e2b7b 100644
 --- a/src/main/java/net/minecraft/server/level/ServerLevel.java
 +++ b/src/main/java/net/minecraft/server/level/ServerLevel.java
 @@ -206,6 +206,9 @@ public class ServerLevel extends Level implements WorldGenLevel {
@@ -72,7 +72,7 @@ index 9a51aa9f40ceaaa3500595bf08b2b5515704b91a..9a9ae2cac9f44e38f58bd58c279fc648
              return false;
          } else {
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 5df955eea09b5abd32c12abf5d13030bf9a3a9ae..d442725c1c9ae274b11f3a11ea4cf15f51d62def 100644
+index 2a11514554b6aea819046282cfcaeeb43d1ed920..2981a29b011cb1a08a776abc5ec6a94228061f98 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -170,6 +170,8 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
@@ -85,7 +85,7 @@ index 5df955eea09b5abd32c12abf5d13030bf9a3a9ae..d442725c1c9ae274b11f3a11ea4cf15f
          if (this.bukkitEntity == null) {
              this.bukkitEntity = CraftEntity.getEntity(this.level.getCraftServer(), this);
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index aa8bbf6435c19013e3ccaa963118d71200b6efea..2cdf117a5041830f201d5f1e98f7cc8f9cb6dd6f 100644
+index c239a71a9d864107c3a8e9537e4160c50b3a76c9..ee5415574dea0712f08e2467ecf93aa1ce39a2e5 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -142,6 +142,7 @@ public abstract class Level implements LevelAccessor, AutoCloseable {
@@ -97,12 +97,12 @@ index aa8bbf6435c19013e3ccaa963118d71200b6efea..2cdf117a5041830f201d5f1e98f7cc8f
      public boolean preventPoiUpdated = false; // CraftBukkit - SPIGOT-5710
      public boolean captureBlockStates = false;
 diff --git a/src/main/java/net/minecraft/world/level/entity/EntityLookup.java b/src/main/java/net/minecraft/world/level/entity/EntityLookup.java
-index c8cf7da4224dccd9b9e8a73bcfc3ff5babfb8f8c..1d04f35b6755b3a7ee77f93c1a30513a5af7d6cf 100644
+index c86e722486359dcfa684af945bf6b9e0b3110554..3e719aa385c5245aae4a00fe860638fc7e276838 100644
 --- a/src/main/java/net/minecraft/world/level/entity/EntityLookup.java
 +++ b/src/main/java/net/minecraft/world/level/entity/EntityLookup.java
 @@ -20,7 +20,7 @@ public class EntityLookup<T extends EntityAccess> {
          for(T entityAccess : this.byId.values()) {
-             U entityAccess2 = (U)((EntityAccess)filter.tryCast(entityAccess));
+             U entityAccess2 = (U)((U)((EntityAccess)filter.tryCast(entityAccess)));
              if (entityAccess2 != null) {
 -                action.accept((T)entityAccess2);
 +                action.accept(entityAccess2); // Paper - decompile fix

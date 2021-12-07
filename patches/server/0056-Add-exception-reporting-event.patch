@@ -108,7 +108,7 @@ index 4cde8d630a0951f297622af4ef781f5b3fabf9af..7044d8c71e85551e11bf2d96b767e088
              }
  
 diff --git a/src/main/java/net/minecraft/world/level/Level.java b/src/main/java/net/minecraft/world/level/Level.java
-index 50a2fdc1f51fe6ca5a62d17e36ed88ecf7d20473..c68ababd68a8c49be6dbef275b94f3f90320e10a 100644
+index ad4b29c96113d15b284aed78e5768588802e468c..731e1cefd2a9c829bfe82ec87038d9333ef21fb3 100644
 --- a/src/main/java/net/minecraft/world/level/Level.java
 +++ b/src/main/java/net/minecraft/world/level/Level.java
 @@ -1,5 +1,10 @@
@@ -151,7 +151,7 @@ index 81b61b6cc1e99328d4d339ca32895d1268c88ca7..28a7c53d98450cc79bee953411a18f50
                                  }
  
 diff --git a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
-index 9638e28077b5720745f6125805fbda702a804f74..d207e54019360f7f94bfa5301462fe3c8ac6758e 100644
+index 949d8cc16c91390ea573dd566bec566dc95efc18..3ba9f8d7dc12709670dcd94df5d82b8d44f983fa 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/LevelChunk.java
 @@ -1,6 +1,7 @@
@@ -211,17 +211,22 @@ index c30d7b04e8383aed7d5f3e93f42c612c685a4df7..fd70133714990ad44b4b2b80c52ffc55
                  try {
                      filechannel.close();
 diff --git a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
-index 68b1a5b6b27f70b0185bb8f0ed924d6d21b43323..e84b99ca10621cb1021d7ec17ba21df24e8c7474 100644
+index 86f017a6b06147605d0214319d5b7208798e826c..10f4e922e2e67bc922c1ee543f32278d13ce6f1c 100644
 --- a/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
 +++ b/src/main/java/net/minecraft/world/level/storage/DimensionDataStorage.java
-@@ -120,6 +120,7 @@ public class DimensionDataStorage {
+@@ -95,6 +95,12 @@ public class DimensionDataStorage {
  
-             pushbackInputStream.close();
-         } catch (Throwable var15) {
-+            com.destroystokyo.paper.exception.ServerInternalException.reportInternalException(var15); // Paper
-             try {
-                 fileInputStream.close();
-             } catch (Throwable var10) {
+             int i = compoundTag.contains("DataVersion", 99) ? compoundTag.getInt("DataVersion") : 1343;
+             var8 = NbtUtils.update(this.fixerUpper, DataFixTypes.SAVED_DATA, compoundTag, i, dataVersion);
++            // Paper start
++        } catch (final Exception ex) {
++            com.destroystokyo.paper.exception.ServerInternalException.reportInternalException(ex);
++            com.destroystokyo.paper.util.SneakyThrow.sneaky(ex);
++            return null; // unreachable
++            // Paper end
+         }
+ 
+         return var8;
 diff --git a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java b/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java
 index 07c4d9cd5081378e1b903518f7174fca959cd9e3..dfc2789009fcaa08baa8054bdac915590b8701d6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scheduler/CraftScheduler.java

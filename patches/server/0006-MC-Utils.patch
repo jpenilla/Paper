@@ -4414,7 +4414,7 @@ index 0000000000000000000000000000000000000000..4d3dc8fba51bf5c0dceb06744781d1df
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/Util.java b/src/main/java/net/minecraft/Util.java
-index 58dbe9077fc12964477d6a6fb57d67c41865412c..3ed0bf0485266c0a2b459f5cc1940f85f74e3624 100644
+index ccf0a2913a047116b309d3c41f73fdd5272d8dd9..622225eae60f6528ad39323a134e57f193c255f8 100644
 --- a/src/main/java/net/minecraft/Util.java
 +++ b/src/main/java/net/minecraft/Util.java
 @@ -98,7 +98,7 @@ public class Util {
@@ -4427,7 +4427,7 @@ index 58dbe9077fc12964477d6a6fb57d67c41865412c..3ed0bf0485266c0a2b459f5cc1940f85
  
      public static long getEpochMillis() {
 diff --git a/src/main/java/net/minecraft/core/BlockPos.java b/src/main/java/net/minecraft/core/BlockPos.java
-index 53f438b3747ff20dd18bc757b5b672aaa9db7b81..5f23b9ab6540530acac623d2cd8e9ec5d0064f39 100644
+index ec5b78ed53b1b7de492006e87fdd903a2fdfbadd..975b4407e607bbbf6a13e2589b00d1c82afbce84 100644
 --- a/src/main/java/net/minecraft/core/BlockPos.java
 +++ b/src/main/java/net/minecraft/core/BlockPos.java
 @@ -531,6 +531,7 @@ public class BlockPos extends Vec3i {
@@ -4447,10 +4447,10 @@ index 53f438b3747ff20dd18bc757b5b672aaa9db7b81..5f23b9ab6540530acac623d2cd8e9ec5
          @Override
          public BlockPos immutable() {
 diff --git a/src/main/java/net/minecraft/nbt/CompoundTag.java b/src/main/java/net/minecraft/nbt/CompoundTag.java
-index cbe273a012bedc3914b8cf1f5ad1fee1dfee6a7e..d0b523387a194d1649469e8d861b0b78a2f4e0b6 100644
+index d4c968c022add1959045865283a5ffdca8df0951..639e177659abf8f92782ee81055546e876c8a6dd 100644
 --- a/src/main/java/net/minecraft/nbt/CompoundTag.java
 +++ b/src/main/java/net/minecraft/nbt/CompoundTag.java
-@@ -122,7 +122,7 @@ public class CompoundTag implements Tag {
+@@ -119,7 +119,7 @@ public class CompoundTag implements Tag {
              return "TAG_Compound";
          }
      };
@@ -4459,7 +4459,7 @@ index cbe273a012bedc3914b8cf1f5ad1fee1dfee6a7e..d0b523387a194d1649469e8d861b0b78
  
      protected CompoundTag(Map<String, Tag> entries) {
          this.tags = entries;
-@@ -185,6 +185,10 @@ public class CompoundTag implements Tag {
+@@ -182,6 +182,10 @@ public class CompoundTag implements Tag {
          this.tags.put(key, NbtUtils.createUUID(value));
      }
  
@@ -6382,7 +6382,7 @@ index f18ae5b80c930c3a7c2da079b9926ab2657c36a3..84b462d5f3c9727f8da6d254e67a7a75
              return chunk.getBlockState(pos);
          }
 diff --git a/src/main/java/net/minecraft/world/level/LevelReader.java b/src/main/java/net/minecraft/world/level/LevelReader.java
-index a1cb8379ed4062d765659e829ba2262487ce7f8b..aa76f45d18f23997af5a9508559817964ef5e23c 100644
+index 945fe8969eb61d13207d60e9c2a906aa9b5b6650..4fede11c074894686a9bdc18b031243af72292ad 100644
 --- a/src/main/java/net/minecraft/world/level/LevelReader.java
 +++ b/src/main/java/net/minecraft/world/level/LevelReader.java
 @@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
@@ -6720,7 +6720,7 @@ index 28555314738ba891e0e36d3c85b1623116f743dd..f263022e1d15e78b51cfd148cf024b9a
  
      @Override
 diff --git a/src/main/java/net/minecraft/world/level/chunk/ProtoChunk.java b/src/main/java/net/minecraft/world/level/chunk/ProtoChunk.java
-index 1ea0048e1ee5321a1fd1584ac5371a371de9d45f..41530d0b759604716f739d10f41627871f2ba319 100644
+index 092ba091a45ab298a598d8636fda483e2eada545..2d7c153749bcab7ee533f48ce87545afcbce9b46 100644
 --- a/src/main/java/net/minecraft/world/level/chunk/ProtoChunk.java
 +++ b/src/main/java/net/minecraft/world/level/chunk/ProtoChunk.java
 @@ -73,6 +73,18 @@ public class ProtoChunk extends ChunkAccess {

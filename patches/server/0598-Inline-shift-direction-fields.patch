@@ -7,7 +7,7 @@ Removes a layer of indirection for EnumDirection.getAdjacent(X|Y|Z)(), which is 
 critical section for much of the server, including the lighting engine.
 
 diff --git a/src/main/java/net/minecraft/core/Direction.java b/src/main/java/net/minecraft/core/Direction.java
-index b92377f109c6bc0d497a20b1f92185cb29b57443..6d883db5c04cbcf454952c0f361029ecbfe4f037 100644
+index 4af55d79b0a62e0886600254446ec1bc81553bda..07771c78a1d67d78070972e8d4b7213ec6f3f4d3 100644
 --- a/src/main/java/net/minecraft/core/Direction.java
 +++ b/src/main/java/net/minecraft/core/Direction.java
 @@ -64,6 +64,11 @@ public enum Direction implements StringRepresentable {
@@ -34,7 +34,7 @@ index b92377f109c6bc0d497a20b1f92185cb29b57443..6d883db5c04cbcf454952c0f361029ec
      }
  
      public static Direction[] orderedByNearest(Entity entity) {
-@@ -357,15 +367,15 @@ public enum Direction implements StringRepresentable {
+@@ -244,15 +254,15 @@ public enum Direction implements StringRepresentable {
      }
  
      public int getStepX() {
