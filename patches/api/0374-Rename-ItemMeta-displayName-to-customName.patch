@@ -1,0 +1,75 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jason Penilla <11360596+jpenilla@users.noreply.github.com>
+Date: Sat, 12 Mar 2022 17:44:04 -0700
+Subject: [PATCH] Rename ItemMeta#displayName to customName
+
+
+diff --git a/src/main/java/org/bukkit/inventory/meta/ItemMeta.java b/src/main/java/org/bukkit/inventory/meta/ItemMeta.java
+index 77f52b117dec8b99a507995a587505229eadb89e..a141a92ec11427f4b53b38b486f10c4535c727c0 100644
+--- a/src/main/java/org/bukkit/inventory/meta/ItemMeta.java
++++ b/src/main/java/org/bukkit/inventory/meta/ItemMeta.java
+@@ -29,25 +29,60 @@ public interface ItemMeta extends Cloneable, ConfigurationSerializable, Persiste
+      * Checks for existence of a display name.
+      *
+      * @return true if this has a display name
++     * @deprecated replaced by {@link #hasCustomName()} for clarity
+      */
+-    boolean hasDisplayName();
+-
+     // Paper start
++    @Deprecated
++    default boolean hasDisplayName() {
++        return this.hasCustomName();
++    }
++
++    /**
++     * Checks for existence of a custom name.
++     *
++     * @return true if this has a custom name
++     */
++    boolean hasCustomName();
++
++    /**
++     * Gets the custom name.
++     *
++     * <p>Plugins should check that {@link #hasCustomName()} returns <code>true</code> before calling this method.</p>
++     *
++     * @return the custom name
++     */
++    @Nullable net.kyori.adventure.text.Component customName();
++
++    /**
++     * Sets the custom name.
++     *
++     * @param customName the custom name to set
++     */
++    void customName(final @Nullable net.kyori.adventure.text.Component customName);
++
+     /**
+      * Gets the display name.
+      *
+      * <p>Plugins should check that {@link #hasDisplayName()} returns <code>true</code> before calling this method.</p>
+      *
+      * @return the display name
++     * @deprecated replaced by {@link #customName()} for clarity
+      */
+-    @Nullable net.kyori.adventure.text.Component displayName();
++    @Deprecated
++    default @Nullable net.kyori.adventure.text.Component displayName() {
++        return this.customName();
++    }
+ 
+     /**
+      * Sets the display name.
+      *
+      * @param displayName the display name to set
++     * @deprecated replaced by {@link #customName(Component)} for clarity
+      */
+-    void displayName(final @Nullable net.kyori.adventure.text.Component displayName);
++    @Deprecated
++    default void displayName(final @Nullable net.kyori.adventure.text.Component displayName) {
++        this.customName(displayName);
++    }
+     // Paper end
+ 
+     /**

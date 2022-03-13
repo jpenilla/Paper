@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jason Penilla <11360596+jpenilla@users.noreply.github.com>
+Date: Sat, 12 Mar 2022 17:44:23 -0700
+Subject: [PATCH] Rename ItemMeta#displayName to customName
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
+index 9ce647730d9f7aa121e13f2ba00037fc18625efd..83a62a04c719309e0628878f69f6ea39b6e69ea5 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
+@@ -859,13 +859,13 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
+ 
+     // Paper start
+     @Override
+-    public net.kyori.adventure.text.Component displayName() {
++    public net.kyori.adventure.text.Component customName() {
+         return displayName == null ? null : net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().deserialize(displayName);
+     }
+ 
+     @Override
+-    public void displayName(final net.kyori.adventure.text.Component displayName) {
+-        this.displayName = displayName == null ? null : net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serialize(displayName);
++    public void customName(final net.kyori.adventure.text.Component customName) {
++        this.displayName = customName == null ? null : net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serialize(customName);
+     }
+     // Paper end
+ 
+@@ -892,7 +892,7 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
+     }
+     // Paper end
+     @Override
+-    public boolean hasDisplayName() {
++    public boolean hasCustomName() { // Paper
+         return this.displayName != null;
+     }
+ 
