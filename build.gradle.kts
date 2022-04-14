@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    paramMappings("org.quiltmc:yarn:1.17.1+build.1:mergedv2")
+    paramMappings("net.fabricmc:yarn:1.17.1+build.65:mergedv2")
     remapper("net.fabricmc:tiny-remapper:0.6.0:fat")
     decompiler("net.minecraftforge:forgeflower:1.5.498.12")
     paperclip("io.papermc:paperclip:2.0.1")
@@ -56,7 +56,7 @@ paperweight {
     minecraftVersion.set(providers.gradleProperty("mcVersion"))
     serverProject.set(project(":Paper-Server"))
 
-    paramMappingsRepo.set("https://maven.quiltmc.org/repository/release/")
+    paramMappingsRepo.set("https://maven.fabricmc.net/")
     remapRepo.set("https://maven.fabricmc.net/")
     decompileRepo.set("https://files.minecraftforge.net/maven/")
 
