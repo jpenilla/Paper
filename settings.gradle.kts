@@ -36,7 +36,9 @@ rootProject.name = "paper"
 for (name in listOf("Paper-API", "Paper-Server", "Paper-MojangAPI")) {
     val projName = name.toLowerCase(Locale.ENGLISH)
     include(projName)
-    findProject(":$projName")!!.projectDir = file(name)
+    val projectDescriptor = findProject(":$projName")!!
+    projectDescriptor.projectDir = file(name)
+    loadVersionCatalogFrom(projectDescriptor)
 }
 
 val testPlugin = file("test-plugin.settings.gradle.kts")
@@ -44,4 +46,27 @@ if (testPlugin.exists()) {
     apply(from = testPlugin)
 } else {
     testPlugin.writeText("// Uncomment to enable the test plugin module\n//include(\":test-plugin\")\n")
+}
+
+loadVersionCatalogFrom(rootProject)
+
+fun loadVersionCatalogFrom(projectDescriptor: ProjectDescriptor) {
+    val file = projectDescriptor.projectDir.resolve("gradle/libs.versions.toml")
+    if (!file.exists()) {
+        return
+    }
+    dependencyResolutionManagement {
+        versionCatalogs {
+            val action = Action<VersionCatalogBuilder> {
+                file.inputStream().use {
+                    org.gradle.api.internal.catalog.parser.TomlCatalogFileParser.parse(it, this)
+                }
+            }
+            if (findByName("libs") != null) {
+                named("libs", action)
+            } else {
+                create("libs", action)
+            }
+        }
+    }
 }
